@@ -1,8 +1,85 @@
-﻿@{
+﻿@* @model BarcodeViewModel *@
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+@* <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div> *@
+
+
+<!-- Views/Barcode/Scan.cshtml -->
+
+
+<div class="container">
+    <h2>Scan Barcode</h2>
+    <form id="barcodeForm" asp-action="Index" method="post">
+        <div class="form-group">
+            <label for="barcodeValue">Barcode:</label>
+            <input type="text" id="barcodeValue" name="BarcodeValue" class="form-control" autofocus />
+        </div>
+    </form>
+
+    <div id="resultMessage">
+        @if (ViewBag.Message != null)
+        {
+            <p>@ViewBag.Message</p>
+
+        }
+    </div>
+    <div>
+    @*     <div class="card">
+            <div class="card-body" style="background-color:ivory;">
+
+
+                <div class="col-xl-12 fixTableHead" style="font-size:80%;">
+                    <table class="table table-bordered" border="1" id="tdEmployeeTable">
+                        <thead>
+                            <tr class="table-dark">
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>DepartMent</th>
+                                <th>Designation</th>
+                                <th>Unit</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        @if(Model.employeeMaster != null)
+                        {
+                        @foreach (var item in Model.employeeMaster)
+                        {
+                        <tr>
+                        <td>@item.Employeeid</td>
+                        <td>@item.Employeename</td>
+                        <td>@item.DepartmentName</td>
+                        <td>@item.DesignationName</td>
+                        <td>@item.Unit</td>
+                        <td> @DateTime.Now.ToString() </td>
+                        <td> @DateTime.Now.ToString() </td>
+                        </tr>
+                        }
+                        }
+
+
+                    </table>
+
+                </div>
+            </div>
+        </div> *@
+
+    </div>
 </div>
+
+<script>
+    debugger;
+    document.getElementById('barcodeValue').addEventListener('input', function () {
+        var barcodeValue = this.value;
+        if (barcodeValue.length > 0) { // Adjust the length as per your barcode requirement
+            document.getElementById('barcodeForm').submit();
+        }
+    });
+</script>

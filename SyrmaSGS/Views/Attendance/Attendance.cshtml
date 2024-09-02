@@ -1,16 +1,34 @@
-﻿
+﻿ @model BarcodeViewModel
 @{
     ViewData["Title"] = "Attendance";
 }
 
-<div style="padding:2%;font-size: large;font-family: cursive;color: crimson; font-weight:bold;">
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<div style="padding:2%;font-size: large;font-family: cursive;color: saddlebrown; font-weight:bold;">
+    <div class="card">  
+        <div class="card-body" style="background-color:ivory;">
+
+       
     <div class="row">
-        <div class="col-lg-4">
-            <label>Employee ID :</label>
-            <input type="text" id="txtEmpID" class="form-control" />
-        </div>
-        <div class="col-lg-4">
-<div class="row">
+                <div class="col-lg-6">
+                <form id="barcodeForm" asp-action="Attendance" method="post">
+                    <div class="form-group">
+                    <div style="padding:1%"> <label>Employee ID :</label></div>
+                        <div style="padding:1%">  <input type="text" id="txtEmpID" name="BarcodeValue" autofocus class="form-control" style="width:50%;" /></div>
+                </div>
+</form>
+                </div>
+                @*   <div class="col-lg-4" style="display:none;">
+                    <img src="~/images/syrmasgs.png" style="width:32%;margin-left:40%;" />
+                </div>
+ *@
+                <div class="col-lg-6">
+<div  style="margin-left:30%;">
+    <div>
+        <input type="hidden" id="hdnduplicate" value="@Model.duplicate" />
+        <input type="hidden" id="hdnerror" value="@Model.error" />
+    </div>
     <div class="col-lg-0" style="padding:1%;">
         <label>Employee ID :70912</label>
         <label id="lblEmpID"></label>
@@ -27,42 +45,252 @@
                     <label>Designation :Manager</label>
                     <label id="lblDesig"></label>
                 </div>
+                        <div id="notification" class="notification">
+                            Duplicate Entry !
+                        </div>
+
+                        <div id="error" class="notification">
+                          Error :  NetWork Issue Please Contact Your Admin !
+                        </div>
+
 </div>
         </div>
-        <div class="col-lg-4">
-            <img src="~/images/syrmasgs.png" style="width:32%;margin-left:40%;" />
+       
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div style="padding:2%;" >
-            <table class="table table-striped table-hover overflow-scroll"  border="1">
+    <div style="padding-top:2%;">
+        <div class="card">
+            <div class="card-body" style="background-color:ivory;">
+
+          
+        <div class="col-xl-12 fixTableHead" style="font-size:80%;">
+            <table class="table table-bordered" border="1" id="tdEmployeeTable">
+                <thead>
                 <tr class="table-dark">
                     <th>Employee ID</th>
                     <th>Employee Name</th>
                     <th>DepartMent</th>
                     <th>Designation</th>
+                    <th>Unit</th>
                     <th>Start Time</th>
                     <th>End Time</th>
                 </tr>
-                @foreach (var item in Model)
+                </thead>
+                <tbody>
+
+                
+                @if(Model != null)
+                {
+                @foreach (var item in Model.attendanceTransactions)
                 {
                     <tr>
-                        <td>70192</td>
-                        <td>Kulothungan</td>
-                        <td>T&D</td>
-                        <td>Manager</td>
-                        <td> @DateTime.Now.ToString() </td>
-                        <td> @DateTime.Now.ToString() </td>
+                        <td>@item.EmpId</td>
+                        <td>@item.EmpName</td>
+                        <td>@item.DepartMemtId</td>
+                        <td>@item.DesignationId</td>
+                        <td>@item.UnitId</td>
+                        <td> @item.StartTime </td>
+                        <td> @item.EndTime </td>
                     </tr>
                 }
-                
+                }
+                        </tbody>
 
                 
             </table>
 
         </div>
+            </div>
+        </div>
     </div>
 </div>
 
 
+<style>
+    table tr th {
+        text-align: center;
+    }
 
+    .fixTableHead {
+        overflow-y: auto;
+        height: 450px;
+    }
+
+        .fixTableHead thead th {
+            position: sticky;
+            top: 0;
+        }
+
+          @@keyframes blink {
+            0% { background-color: yellow; }
+            50% { background-color: white; }
+            100% { background-color: yellow; }
+        }
+
+        .blink {
+            animation: blink 1s linear infinite;
+        }
+
+    .notification {
+        display: none; /* Hidden by default */
+        position: fixed;
+        bottom: 40%;
+        right: 46%;
+        background-color: #333;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+        .notification.show {
+            display: block;
+            opacity: 1;
+        }
+
+
+</style>
+<script>
+    $(document).ready(function (){
+        
+        var duplicate = $('#hdnduplicate').val();
+        if (duplicate)
+        {
+            //alert('Duplicate Entry');
+            var $notification = $("#notification");
+
+            $notification.addClass("show");
+
+            setTimeout(function () {
+                $notification.removeClass("show");
+            }, 3000); // Hide after 3 seconds
+            $('#txtEmpID').val('');
+        }
+
+        var Error = $('#hdnerror').val();
+        if (Error) {
+            //alert('Duplicate Entry');
+            var $notification = $("#error");
+
+            $notification.addClass("show");
+
+            setTimeout(function () {
+                $notification.removeClass("show");
+            }, 3000); // Hide after 3 seconds
+          //  $('#txtEmpID').val('');
+        }
+
+    })
+
+    document.getElementById('txtEmpID').addEventListener('input', function () {
+        var barcodeValue = this.value;
+        if (barcodeValue.length > 0) { // Adjust the length as per your barcode requirement
+            document.getElementById('barcodeForm').submit();
+        }
+    });
+    // var strLastValue = '';
+    // $(document).ready(function () {
+    //     $('#txtEmpID').val('');
+    //     $('#txtEmpID').focus();
+        
+    //    var strHtmlload = '<tr id="trNoData"><td colspan="7">No Data Found</td></tr>';
+    //     $('#tdEmployeeTable tbody').append(strHtmlload);
+    //     $('#txtEmpID').val('');
+    // });
+   
+
+    function dupSearch() {
+        var searchValue = $('#txtEmpID').val().toLowerCase();
+        var found = false;
+        var cnt = 0;
+        $('#tdEmployeeTable tbody tr').each(function () {
+            cnt = cnt + 1;
+         //   debugger;
+            var rowText = $(this).find('td:first').html();
+           // var rowText = $(this).text().toLowerCase();
+            //if (rowText.includes(searchValue)) {
+            if (rowText == searchValue) {
+                
+                // if (cnt != 1) {
+                    
+                // }
+                found = true;
+                
+                return false;
+            }
+        });
+
+        if (found) {
+           // $('#result').text('Value found in the table.');
+            $('#txtEmpID').val('');
+           // alert('found');
+            $(this).addClass('blink');
+            return false;
+        } else {
+           // $('#result').text('Value not found in the table.');
+           // alert('Not found');
+            return true;
+        }
+
+
+    }
+
+    function insertAttendancedata(insertdata)
+    {
+
+    }
+
+    function getEmployeeDetails() {
+
+        var Empid = $('#txtEmpID').val();
+        // if (Empid.length >= 3) {
+        var duplicate = true;
+        duplicate = dupSearch();
+        if (duplicate) {
+            if (Empid != '') {
+                $.ajax({
+                    url: '/Attendance/getEmployeeDetail',
+                    type: 'json',
+                    data: { empid: Empid },
+                    async: false,
+                    success: function (result) {
+                        if (result != null) {
+                            debugger;
+                            if (result.employeeId != null) {
+                                debugger;
+                                // alert('duplicate Entry');result.eemployeeId != strLastValue &&
+                                // return false;
+                                $('#trNoData').css('display', 'none'); var strHtml = "";
+                                //  $.each(result, function (i, value) {
+
+                                strLastValue = result.employeeId;
+                                var now = new Date(Date.now());
+                                var formatted = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+
+                                strHtml = '<tr><td>' + result.employeeId + '</td><td>' + result.firstName + '</td><td>' + result.department + '</td><td>' + result.designation + '</td><td>' + result.location + '</td><td>' + formatted + '</td><td>' + formatted + '</td></tr>';
+                                $('#tdEmployeeTable tbody').append(strHtml);
+                                $('#txtEmpID').val('');
+                                insertAttendancedata(result);
+                            }
+                            // });
+
+                        }
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+                // }
+                // else
+                //     $('#txtEmpID').val('');
+            }
+        }
+
+    }
+
+    
+</script>

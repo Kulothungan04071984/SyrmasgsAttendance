@@ -2,7 +2,11 @@
 {
     public interface iServicescs 
     {
-        List<EmployeeMaster> GetEmployeeDetails();
+        List<AttendanceTransactionDetail> GetEmployeeDetails();
+
+        int InsertEmployeeTimesheet(string empid);
+
+        //EmployeeMaster GetEmployeeDetail();
 
     }
 }
