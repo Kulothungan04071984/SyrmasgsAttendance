@@ -31,6 +31,8 @@ public partial class SyrmasgsAttendanceContext : DbContext
 
     public virtual DbSet<UnitMaster> UnitMasters { get; set; }
 
+    public virtual DbSet<UserLogin> UserLogins { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=STPLPC2072;Database=SyrmasgsAttendance;Integrated Security=True;TrustServerCertificate=True;");
@@ -280,6 +282,35 @@ public partial class SyrmasgsAttendanceContext : DbContext
             entity.Property(e => e.Updatedby)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<UserLogin>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("UserLogin");
+
+            entity.Property(e => e.Createddate)
+                .HasColumnType("datetime")
+                .HasColumnName("createddate");
+            entity.Property(e => e.Createid).HasColumnName("createid");
+            entity.Property(e => e.Isactive).HasColumnName("isactive");
+            entity.Property(e => e.Updatedate)
+                .HasColumnType("datetime")
+                .HasColumnName("updatedate");
+            entity.Property(e => e.Updateid).HasColumnName("updateid");
+            entity.Property(e => e.Userid)
+                .HasMaxLength(120)
+                .HasColumnName("userid");
+            entity.Property(e => e.Userloginid)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("userloginid");
+            entity.Property(e => e.Userpassword)
+                .HasMaxLength(125)
+                .HasColumnName("userpassword");
+            entity.Property(e => e.Usertype)
+                .HasMaxLength(25)
+                .HasColumnName("usertype");
         });
 
         OnModelCreatingPartial(modelBuilder);
