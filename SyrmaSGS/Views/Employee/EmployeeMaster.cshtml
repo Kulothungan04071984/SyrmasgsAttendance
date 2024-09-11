@@ -1,23 +1,25 @@
-﻿@model EmployeeMaster
+﻿@model EmployeeDetails
 @{
     ViewData["Title"] = "EmployeeMaster";
 }
 
 
 <div class="container backstyle">
-    <h1>EmployeeMaster</h1>
+    <h3>EmployeeMaster</h3>
+    
     <section>
+        <form asp-action="insertEmployeeMaster" method="post" style="font-size:100%;">
         <div class="row">
             <div class="col-lg-0">
                 <label>Employee ID :</label>
-                <input type="text" class="form-control" asp-for="EmpCode" style="width:32%;" />
+                <input type="text" class="form-control" asp-for="EMPLOYEEID" style="width:32%;" />
             </div>
             </div>
       
-        <div class="row">
+        <div class="row" style="padding:1%">
             <div class="col-lg-4">
-                <label>First Name :</label>
-                <input type="text" class="form-control" asp-for="Empname" />
+                <label>Employee Name :</label>
+                <input type="text" class="form-control" asp-for="EMPLOYEENAME" />
             </div>
             @* <div class="col-lg-4">
                 <label>Middle Name :</label>
@@ -27,25 +29,26 @@
                 <label>Last Name :</label>
                 <input type="text" class="form-control" asp-for="LastName" />
             </div> *@
-        </div>
-        <div class="row">
             <div class="col-lg-4">
                 <label>Date of Birth :</label>
-                <input type="datetime-local" class="form-control" asp-for="Dob" />
+                <input type="datetime" class="form-control" asp-for="DOB" />
             </div>
             <div class="col-lg-4">
                 <label>Date of Joining :</label>
-                <input type="datetime-local" class="form-control" asp-for="Doj" />
+                <input type="datetime" class="form-control" asp-for="DOJ" />
             </div>
-           @*  <div class="col-lg-4">
+        </div>
+       @*  <div class="row">
+            
+            <div class="col-lg-4">
                 <label>FathersName :</label>
                 <input type="text" class="form-control" asp-for="FathersName" />
-            </div> *@
-        </div>
-        <div class="row">
+            </div>
+        </div> *@
+            <div class="row" style="padding:1%">
             <div class="col-lg-4">
                 <label>Gendar :</label>
-                <select class="form-control" asp-for="Gender">
+                <select class="form-control" asp-for="GENDER">
                     <option value="0">Select</option>
                     <option value="1">Male</option>
                     <option value="2">Female</option>
@@ -54,30 +57,27 @@
             </div>
             <div class="col-lg-4">
                 <label>Department :</label>
-                <select asp-for="DepartmentName" class="form-control"></select>
+                <select asp-for="DEPARTMENTID" asp-items="Model.ddlDepartment" class="form-control"></select>
             </div>
             <div class="col-lg-4">
                 <label>SubDepartment :</label>
-                <select asp-for="SubDepartment" class="form-control"></select>
+                <select asp-for="SUBDEPARTMENTID" asp-items="Model.ddlSubDepartment" class="form-control"></select>
             </div>
         </div>
-        <div class="row">
+            <div class="row" style="padding:1%">
             <div class="col-lg-4">
                 <label>Designation :</label>
-                <select asp-for="DesigName" class="form-control">
-                    <option value="0">Select</option>
+                <select asp-for="DESIGNATIONID" asp-items="Model.ddlDesignation" class="form-control">
                 </select>
             </div>
             <div class="col-lg-4">
                 <label>Grade :</label>
-                <select asp-for="CategoryName" class="form-control">
-                    <option value="0">Select</option>
+                <select asp-for="CATEGORYID" asp-items="Model.ddlCategory" class="form-control">
                 </select>
             </div>
             <div class="col-lg-4">
                 <label>Location :</label>
-                <select asp-for="Unit" class="form-control">
-                    <option value="0">Select</option>
+                <select asp-for="UNIT" asp-items="Model.ddlUnit" class="form-control">
                 </select>
             </div>
         </div>
@@ -120,7 +120,14 @@
                     <option value="0">Select</option>
                 </select>
             </div> *@
+        @* </div> *@
+        <div class="row" style="padding-left:87%;padding-top:1%;">
+            <div class="col-lg-0">
+                <input type="submit" id="btnSave" name="Save" value="Save"  class="btn btn-primary"/>
+                <input type="button" id="btnSave" name="Clear" value="Clear"  class="btn btn-info" />
+            </div>
         </div>
+        </form>
     </section>
 </div>
 <style>

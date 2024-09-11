@@ -1,15 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿//using AspNetCore;
+//using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SyrmaSGS.Models;
 
 namespace SyrmaSGS.Controllers
 {
     public class EmployeeController : Controller
     {
         // GET: EmployeeController
+        private readonly iServicescs _iServicescs;
+
+        public EmployeeController(iServicescs servicescs)
+        {
+            _iServicescs = servicescs;
+        }
         public ActionResult EmployeeMaster()
         {
-            return View();
+            var empDetails = _iServicescs.GetEmployeeDetail();
+            return View(empDetails);
         }
+
+        
 
         // GET: EmployeeController/Details/5
         public ActionResult Details(int id)

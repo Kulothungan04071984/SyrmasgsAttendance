@@ -49,21 +49,26 @@ namespace SyrmaSGS.Controllers
                     {
                         model.duplicate = true;
                         model.error = false;
+                        model.Try = false;
                     }
                     else if (insertresult == 1)
                     {
                         model.duplicate = false;
                         model.error = false;
+                        model.Try = false;
                     }
                     else if (insertresult == 3)
                     {
                         model.duplicate = false;
                         model.error = true;
+                        model.Try = false;
                     }
                 }
                 else if (model == null)
                 {
-
+                    model.duplicate = false;
+                    model.error = false;
+                    model.Try = true;
                 }
                 model = _iServicescs.GetEmployeeDetails();
                // model = _iServicescs.GetEmployeeDetail();

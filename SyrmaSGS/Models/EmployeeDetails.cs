@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Xml.Linq;
 
 namespace SyrmaSGS.Models
@@ -34,6 +35,27 @@ namespace SyrmaSGS.Models
         public DateTime? STARTTIME { get; set; }
 
         public DateTime? ENDTIME { get; set; }
+
+        public List<SelectListItem> ddlDepartment { get; set; }
+
+        public List<SelectListItem> ddlDesignation { get; set; }
+
+        public List<SelectListItem> ddlSubDepartment { get; set; }
+
+        public List<SelectListItem> ddlCategory { get; set; }
+
+        public List<SelectListItem> ddlUnit { get; set; }
+
+        public int DEPARTMENTID { get; set; }
+
+        public int  DESIGNATIONID { get; set; }
+
+        public int SUBDEPARTMENTID { get; set; }
+
+        public int CATEGORYID { get; set; }
+
+        public int UNITID { get; set; }
+
 
     }
 }

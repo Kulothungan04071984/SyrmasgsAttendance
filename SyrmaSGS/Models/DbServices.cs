@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using System.Globalization;
@@ -26,7 +27,7 @@ namespace SyrmaSGS.Models
                               join dept in _context.DepartMentMasters on attendance.DepartMemtId equals dept.DeptId
                               join desi in _context.DesignationMasters on attendance.DesignationId equals desi.DesiId
                               join unit in _context.UnitMasters on attendance.UnitId equals unit.UnitId
-                              where attendance.CurrentDate == DateTime.Today
+                              where attendance.CurrentDate == DateTime.Today && attendance.IsActive == true
                               select new EmployeeDetails
                               {
                                   EMPLOYEEID = attendance.EmpId,
@@ -191,17 +192,22 @@ namespace SyrmaSGS.Models
             }
         }
 
-        public BarcodeViewModel GetEmployeeDetail()
+        public EmployeeDetails GetEmployeeDetail()
         {
-            BarcodeViewModel objEmployeeDetails = new BarcodeViewModel();
+            EmployeeDetails objEmployeeDetails = new EmployeeDetails();
             try
             {
-               // objEmployeeDetails.employeeMaster = _context.EmployeeMasters.Where(a => a.EmpCode == Convert.ToString(empid) ).FirstOrDefault();
-                objEmployeeDetails.overAllCount = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true).Count();
-                objEmployeeDetails.unit_1 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 2 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
-                objEmployeeDetails.unit_2 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 3 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
-                objEmployeeDetails.unit_3 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 4 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
-
+                //// objEmployeeDetails.employeeMaster = _context.EmployeeMasters.Where(a => a.EmpCode == Convert.ToString(empid) ).FirstOrDefault();
+                // objEmployeeDetails.overAllCount = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true).Count();
+                // objEmployeeDetails.unit_1 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 2 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
+                // objEmployeeDetails.unit_2 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 3 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
+                // objEmployeeDetails.unit_3 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 4 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
+                objEmployeeDetails.ddlDepartment = _context.DepartMentMasters.Where(a => a.IsActive == true).OrderBy(a => a.DepartMentName).Select(e => new SelectListItem { Value = e.DeptId.ToString(), Text = e.DepartMentName }).ToList();
+                objEmployeeDetails.ddlDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                objEmployeeDetails.ddlSubDepartment = _context.SubDepartmentMasters.Where(a => a.IsActive == true).OrderBy(a=>a.SubDepartmentName).Select(e => new SelectListItem { Value = e.SubDepartmentid.ToString(), Text = e.SubDepartmentName }).ToList();
+                objEmployeeDetails.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                objEmployeeDetails.ddlUnit = _context.UnitMasters.Where(a => a.IsActive == true).OrderBy(a => a.UnitName).Select(e => new SelectListItem { Value = e.UnitId.ToString(), Text = e.UnitName }).ToList();
+                objEmployeeDetails.ddlUnit.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
                 return objEmployeeDetails;
             }
             catch (Exception ex)

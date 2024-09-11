@@ -7,7 +7,7 @@
         int InsertEmployeeTimesheet(string empid);
         bool loginValidation(UserLogin userLogin);
 
-        BarcodeViewModel GetEmployeeDetail();
+        EmployeeDetails GetEmployeeDetail();
 
     }
 }

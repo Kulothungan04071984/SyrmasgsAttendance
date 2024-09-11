@@ -13,7 +13,7 @@
         public int shiftCount { get; set; }
         public int overAllCount { get; set; }
         public string gender { get; set; }
-
+        public bool Try {  get; set; }
         public List<EmployeeDetails> employeeDetails { get; set; }
 
     }

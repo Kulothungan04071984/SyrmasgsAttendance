@@ -28,6 +28,7 @@
     <div>
         <input type="hidden" id="hdnduplicate" value="@Model.duplicate" />
         <input type="hidden" id="hdnerror" value="@Model.error" />
+        <input type="hidden" id="hdntry" value="@Model.Try" />
     </div>
     <div class="col-lg-0" style="padding:1%;">
         <label>OverAll Count :@Model.overAllCount</label>
@@ -52,6 +53,9 @@
                         <div id="error" class="notification">
                           Error :  NetWork Issue Please Contact Your Admin !
                         </div>
+                            <div id="Try" class="notification">
+                                Message :  Try Again !
+                            </div>
 
 </div>
         </div>
@@ -194,6 +198,19 @@
                 $notification.removeClass("show");
             }, 3000); // Hide after 3 seconds
           //  $('#txtEmpID').val('');
+        }
+
+        var Try = $('#hdntry').val();
+        if (Try) {
+            //alert('Duplicate Entry');
+            var $notification = $("#Try");
+
+            $notification.addClass("show");
+
+            setTimeout(function () {
+                $notification.removeClass("show");
+            }, 3000); // Hide after 3 seconds
+            //  $('#txtEmpID').val('');
         }
 
     })
