@@ -7,7 +7,7 @@
 <div >
 <div style="padding:2%;font-size: large;font-family: cursive;color: #FFFFFF; font-weight:bold;">
     <div class="card">
-            <div class="card-body" style="background-color:#004f7d;">
+            <div class="card-body" style="background-color:#2596be;">
 
        
     <div class="row">
@@ -30,19 +30,19 @@
         <input type="hidden" id="hdnerror" value="@Model.error" />
     </div>
     <div class="col-lg-0" style="padding:1%;">
-        <label>Employee ID :70912</label>
+        <label>OverAll Count :@Model.overAllCount</label>
         <label id="lblEmpID"></label>
     </div>
                 <div class="col-lg-0" style="padding:1%;">
-                    <label>Employee Name :Kulothungan.K</label>
+                    <label>Unit 1 :@Model.unit_1</label>
                     <label id="lblEmpName"></label>
                 </div>
                 <div class="col-lg-0" style="padding:1%;">
-                    <label>DepartMent :T&D</label>
+                                <label>Unit 2 :@Model.unit_2</label>
                     <label id="lblDepart"></label>
                 </div>
                 <div class="col-lg-0" style="padding:1%;">
-                    <label>Designation :Manager</label>
+                                <label>Unit 3 :@Model.unit_3</label>
                     <label id="lblDesig"></label>
                 </div>
                         <div id="notification" class="notification">
@@ -61,9 +61,7 @@
     </div>
     <div style="padding-top:2%;">
         <div class="card">
-                <div class="card-body" style="background-color:#004f7d
-
-;">
+                <div class="card-body" style="background-color:#2596be;">
 
           
         <div class="col-xl-12 fixTableHead" style="font-size:80%;color:#FFFFFF">
@@ -84,19 +82,31 @@
                 
                 @if(Model != null)
                 {
-                @foreach (var item in Model.attendanceTransactions)
+                    @if(Model.employeeDetails.Count > 0)
+                 {
+                @foreach (var item in Model.employeeDetails)
                 {
                     <tr>
-                        <td>@item.EmpId</td>
-                        <td>@item.EmpName</td>
-                        <td>@item.DepartMemtId</td>
-                        <td>@item.DesignationId</td>
-                        <td>@item.UnitId</td>
-                        <td> @item.StartTime </td>
-                        <td> @item.EndTime </td>
+                        <td>@item.EMPLOYEEID</td>
+                        <td>@item.EMPLOYEENAME</td>
+                        <td>@item.DEPARTMENT_NAME</td>
+                        <td>@item.DESIGNATION_NAME</td>
+                        <td>@item.UNIT</td>
+                        <td> @item.STARTTIME </td>
+                        <td> @item.ENDTIME </td>
                     </tr>
                 }
+                                       
+                                    }
+                                    else
+                                    {
+                                        <tr class="NoData"><td colspan="7">No Data Found</td></tr>
+                                    }
                 }
+                                else
+                                {
+                                    <tr class="NoData"><td colspan="7">No Data Found</td></tr>
+                                }
                         </tbody>
 
                 

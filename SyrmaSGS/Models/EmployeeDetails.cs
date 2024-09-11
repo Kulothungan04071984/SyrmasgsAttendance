@@ -31,6 +31,9 @@ namespace SyrmaSGS.Models
 
         public string REPORTING_MANAGER_E_MAIL_ID { get; set; }
 
+        public DateTime? STARTTIME { get; set; }
+
+        public DateTime? ENDTIME { get; set; }
 
     }
 }

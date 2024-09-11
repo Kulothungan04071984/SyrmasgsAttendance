@@ -2,12 +2,12 @@
 {
     public interface iServicescs 
     {
-        List<AttendanceTransactionDetail> GetEmployeeDetails();
+        BarcodeViewModel GetEmployeeDetails();
 
         int InsertEmployeeTimesheet(string empid);
         bool loginValidation(UserLogin userLogin);
 
-        //EmployeeMaster GetEmployeeDetail();
+        BarcodeViewModel GetEmployeeDetail();
 
     }
 }

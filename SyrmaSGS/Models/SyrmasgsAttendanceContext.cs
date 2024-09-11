@@ -23,6 +23,8 @@ public partial class SyrmasgsAttendanceContext : DbContext
 
     public virtual DbSet<EmployeeMaster> EmployeeMasters { get; set; }
 
+    public virtual DbSet<EmployeeMaster1> EmployeeMaster1s { get; set; }
+
     public virtual DbSet<EmployeeMasterFull> EmployeeMasterFulls { get; set; }
 
     public virtual DbSet<EmployeeMasterOld> EmployeeMasterOlds { get; set; }
@@ -109,6 +111,45 @@ public partial class SyrmasgsAttendanceContext : DbContext
                 .HasNoKey()
                 .ToTable("EmployeeMaster");
 
+            entity.Property(e => e.CategoryName)
+                .HasMaxLength(255)
+                .HasColumnName("CATEGORY_NAME");
+            entity.Property(e => e.DepartmentName)
+                .HasMaxLength(255)
+                .HasColumnName("DEPARTMENT_NAME");
+            entity.Property(e => e.DesigName)
+                .HasMaxLength(255)
+                .HasColumnName("DESIG_NAME");
+            entity.Property(e => e.Dob)
+                .HasColumnType("datetime")
+                .HasColumnName("DOB");
+            entity.Property(e => e.Doj)
+                .HasColumnType("datetime")
+                .HasColumnName("DOJ");
+            entity.Property(e => e.EmpCode)
+                .HasMaxLength(255)
+                .HasColumnName("EMP CODE");
+            entity.Property(e => e.Empname)
+                .HasMaxLength(255)
+                .HasColumnName("EMPNAME");
+            entity.Property(e => e.Gender)
+                .HasMaxLength(255)
+                .HasColumnName("GENDER");
+            entity.Property(e => e.SNo).HasColumnName("S#NO");
+            entity.Property(e => e.SubDepartment)
+                .HasMaxLength(255)
+                .HasColumnName("SUB DEPARTMENT");
+            entity.Property(e => e.Unit)
+                .HasMaxLength(255)
+                .HasColumnName("UNIT");
+        });
+
+        modelBuilder.Entity<EmployeeMaster1>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("EmployeeMaster_1");
+
             entity.Property(e => e.BranchState).HasMaxLength(255);
             entity.Property(e => e.Category).HasMaxLength(255);
             entity.Property(e => e.CoffPattern).HasMaxLength(255);
@@ -123,7 +164,9 @@ public partial class SyrmasgsAttendanceContext : DbContext
             entity.Property(e => e.Department).HasMaxLength(255);
             entity.Property(e => e.Designation).HasMaxLength(255);
             entity.Property(e => e.Division).HasMaxLength(255);
-            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+            entity.Property(e => e.EmployeeId)
+                .HasMaxLength(120)
+                .HasColumnName("EmployeeID");
             entity.Property(e => e.FathersName).HasMaxLength(255);
             entity.Property(e => e.FirstLastPunch).HasMaxLength(255);
             entity.Property(e => e.FirstName).HasMaxLength(255);
@@ -257,6 +300,10 @@ public partial class SyrmasgsAttendanceContext : DbContext
                 .HasNoKey()
                 .ToTable("SubDepartmentMaster");
 
+            entity.Property(e => e.DDpartmentname)
+                .HasMaxLength(125)
+                .IsUnicode(false)
+                .HasColumnName("D_Dpartmentname");
             entity.Property(e => e.IsActive).HasColumnName("isActive");
             entity.Property(e => e.SubDepartmentName).HasMaxLength(128);
             entity.Property(e => e.SubDepartmentid).ValueGeneratedOnAdd();

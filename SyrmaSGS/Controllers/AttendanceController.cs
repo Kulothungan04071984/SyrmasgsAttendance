@@ -15,7 +15,8 @@ namespace SyrmaSGS.Controllers
         public IActionResult Attendance()
         {
             BarcodeViewModel objViewModel=new BarcodeViewModel();
-            objViewModel.attendanceTransactions = _iServicescs.GetEmployeeDetails();
+            objViewModel = _iServicescs.GetEmployeeDetails();
+           // objViewModel=_iServicescs.GetEmployeeDetail();
             return View(objViewModel);
         }
 
@@ -34,30 +35,38 @@ namespace SyrmaSGS.Controllers
             //{
             try
             {
-                string scannedValue = model.BarcodeValue;
+                if (model != null)
+                {
+                    string scannedValue = model.BarcodeValue;
 
-                // Handle the barcode value here (e.g., database lookup, processing)
-                // ViewBag.Message = "Scanned Barcode Value: " + scannedValue;
+                    // Handle the barcode value here (e.g., database lookup, processing)
+                    // ViewBag.Message = "Scanned Barcode Value: " + scannedValue;
 
-                // Clear the input field after processing
-                // ModelState.Clear();
-                int insertresult = _iServicescs.InsertEmployeeTimesheet(scannedValue);
-                if (insertresult == 2)
-                {
-                    model.duplicate = true;
-                    model.error = false;
+                    // Clear the input field after processing
+                    // ModelState.Clear();
+                    int insertresult = _iServicescs.InsertEmployeeTimesheet(scannedValue);
+                    if (insertresult == 2)
+                    {
+                        model.duplicate = true;
+                        model.error = false;
+                    }
+                    else if (insertresult == 1)
+                    {
+                        model.duplicate = false;
+                        model.error = false;
+                    }
+                    else if (insertresult == 3)
+                    {
+                        model.duplicate = false;
+                        model.error = true;
+                    }
                 }
-                else if (insertresult == 1)
+                else if (model == null)
                 {
-                    model.duplicate = false;
-                    model.error = false;
+
                 }
-                else if (insertresult == 3)
-                {
-                    model.duplicate = false;
-                    model.error = true;
-                }
-                model.attendanceTransactions = _iServicescs.GetEmployeeDetails();
+                model = _iServicescs.GetEmployeeDetails();
+               // model = _iServicescs.GetEmployeeDetail();
                 //}
 
                 return View(model);

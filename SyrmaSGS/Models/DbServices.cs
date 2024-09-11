@@ -11,19 +11,47 @@ namespace SyrmaSGS.Models
         {
             _context = context;
         }
-        public List<AttendanceTransactionDetail> GetEmployeeDetails()
+        public BarcodeViewModel GetEmployeeDetails()
         {
+            var objModel = new BarcodeViewModel();
             try
             {
 
-              //  var result = new List<AttendanceTransactionDetail>();
-                var result = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true).OrderByDescending(a => a.TransId).ToList();
-                return result;
+                //  var result = new List<AttendanceTransactionDetail>();
+                // var result = _context.AttendanceTransactionDetails.join(_context.DepartMentMasters, deptid=> deptid.)
+                //   Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true).OrderByDescending(a => a.TransId).ToList();
+                //var result =_context.AttendanceTransactionDetails.Join(
+                //_context.DepartMentMasters,a=>a.DepartMemtId,d=>d.DeptId,(a,d)=> new (a.DepartMemtId,d.DepartMentName) )
+                var result = (from attendance in _context.AttendanceTransactionDetails
+                              join dept in _context.DepartMentMasters on attendance.DepartMemtId equals dept.DeptId
+                              join desi in _context.DesignationMasters on attendance.DesignationId equals desi.DesiId
+                              join unit in _context.UnitMasters on attendance.UnitId equals unit.UnitId
+                              where attendance.CurrentDate == DateTime.Today
+                              select new EmployeeDetails
+                              {
+                                  EMPLOYEEID = attendance.EmpId,
+                                  EMPLOYEENAME = attendance.EmpName,
+                                  DEPARTMENT_NAME = dept.DepartMentName,
+                                  DESIGNATION_NAME = desi.DesignationName,
+                                  UNIT = unit.UnitName,
+                                  STARTTIME = attendance.StartTime,
+                                  ENDTIME = attendance.EndTime,
+
+                              }).ToList();
+
+                objModel.employeeDetails=result;
+                objModel.overAllCount = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true).Count();
+                objModel.unit_1 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today&& a.UnitId == 2 && a.IsActive == true).Count();
+                objModel.unit_2 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 3 && a.IsActive == true).Count();
+                objModel.unit_3 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 4 && a.IsActive == true).Count();
+
+
+                return objModel;
             }
             catch (Exception ex)
             {
                 writeErrorMessage(ex.Message.ToString(), "InsertEmployeeTimesheet");
-                return new List<AttendanceTransactionDetail>();
+                return new BarcodeViewModel();
             }
             
         }
@@ -48,9 +76,9 @@ namespace SyrmaSGS.Models
             int insertResult = 0;
             try
             {
-                var empDetails = _context.EmployeeMasters.Where(a => a.EmployeeId.ToString() == empid && a.IsActive == "1").FirstOrDefault();
+                var empDetails = _context.EmployeeMasters.Where(a => a.EmpCode.ToString() == empid).FirstOrDefault();
                 var exsitTime = _context.AttendanceTransactionDetails
-                    .Where(a => a.CurrentDate == DateTime.Today && a.EmpId == empDetails.EmployeeId.ToString())
+                    .Where(a => a.CurrentDate == DateTime.Today && a.EmpId == empDetails.EmpCode.ToString())
                     .Select(a => new AttendanceTransactionDetail()
                     { TransId = a.TransId, EmpId = a.EmpId, StartTime = a.StartTime, EndTime = a.EndTime })
                     .OrderByDescending(a => a.TransId).FirstOrDefault();
@@ -142,8 +170,11 @@ namespace SyrmaSGS.Models
             int insertResults = 0;
             try
             {
-                timeDetails.EmpId = empDetails.EmployeeId.ToString();
-                timeDetails.EmpName = empDetails.FirstName;
+                timeDetails.EmpId = empDetails.EmpCode.ToString();
+                timeDetails.EmpName = empDetails.Empname;
+                timeDetails.DesignationId = Convert.ToInt32(empDetails.DesigName);
+                timeDetails.DepartMemtId = Convert.ToInt32(empDetails.DepartmentName);
+                timeDetails.UnitId = Convert.ToInt32(empDetails.Unit);
                 timeDetails.CurrentDate = DateTime.Today;
                 timeDetails.IsActive = true;
                 DateTime now = DateTime.Now;
@@ -160,14 +191,17 @@ namespace SyrmaSGS.Models
             }
         }
 
-        public BarcodeViewModel GetEmployeeDetail(string empid)
+        public BarcodeViewModel GetEmployeeDetail()
         {
             BarcodeViewModel objEmployeeDetails = new BarcodeViewModel();
             try
             {
-                objEmployeeDetails.employeeMaster = _context.EmployeeMasters.Where(a => a.EmployeeId == Convert.ToDouble(empid)).FirstOrDefault();
+               // objEmployeeDetails.employeeMaster = _context.EmployeeMasters.Where(a => a.EmpCode == Convert.ToString(empid) ).FirstOrDefault();
                 objEmployeeDetails.overAllCount = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true).Count();
-                // objEmployeeDetails.overAllCount = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true && a.loc).Count();
+                objEmployeeDetails.unit_1 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 2 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
+                objEmployeeDetails.unit_2 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 3 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
+                objEmployeeDetails.unit_3 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 4 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
+
                 return objEmployeeDetails;
             }
             catch (Exception ex)

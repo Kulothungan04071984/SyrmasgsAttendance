@@ -12,4 +12,6 @@ public partial class SubDepartmentMaster
     public int? Departmentid { get; set; }
 
     public bool? IsActive { get; set; }
+
+    public string? DDpartmentname { get; set; }
 }

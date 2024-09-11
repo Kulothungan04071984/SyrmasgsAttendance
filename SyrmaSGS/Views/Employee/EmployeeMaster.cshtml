@@ -1,0 +1,134 @@
+﻿@model EmployeeMaster
+@{
+    ViewData["Title"] = "EmployeeMaster";
+}
+
+
+<div class="container backstyle">
+    <h1>EmployeeMaster</h1>
+    <section>
+        <div class="row">
+            <div class="col-lg-0">
+                <label>Employee ID :</label>
+                <input type="text" class="form-control" asp-for="EmpCode" style="width:32%;" />
+            </div>
+            </div>
+      
+        <div class="row">
+            <div class="col-lg-4">
+                <label>First Name :</label>
+                <input type="text" class="form-control" asp-for="Empname" />
+            </div>
+            @* <div class="col-lg-4">
+                <label>Middle Name :</label>
+                <input type="text" class="form-control" asp-for="MiddleName" />
+            </div>
+            <div class="col-lg-4">
+                <label>Last Name :</label>
+                <input type="text" class="form-control" asp-for="LastName" />
+            </div> *@
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Date of Birth :</label>
+                <input type="datetime-local" class="form-control" asp-for="Dob" />
+            </div>
+            <div class="col-lg-4">
+                <label>Date of Joining :</label>
+                <input type="datetime-local" class="form-control" asp-for="Doj" />
+            </div>
+           @*  <div class="col-lg-4">
+                <label>FathersName :</label>
+                <input type="text" class="form-control" asp-for="FathersName" />
+            </div> *@
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Gendar :</label>
+                <select class="form-control" asp-for="Gender">
+                    <option value="0">Select</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                    <option value="3">Transgender</option>
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <label>Department :</label>
+                <select asp-for="DepartmentName" class="form-control"></select>
+            </div>
+            <div class="col-lg-4">
+                <label>SubDepartment :</label>
+                <select asp-for="SubDepartment" class="form-control"></select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>Designation :</label>
+                <select asp-for="DesigName" class="form-control">
+                    <option value="0">Select</option>
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <label>Grade :</label>
+                <select asp-for="CategoryName" class="form-control">
+                    <option value="0">Select</option>
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <label>Location :</label>
+                <select asp-for="Unit" class="form-control">
+                    <option value="0">Select</option>
+                </select>
+            </div>
+        </div>
+      @*   <div class="row">
+            <div class="col-lg-4">
+                <label>Division :</label>
+                <select asp-for="Designation" class="form-control">
+                    <option value="0">Select</option>
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <label>ReportingTo :</label>
+                <select asp-for="LeaveReportingTo" class="form-control">
+                    <option value="0">Select</option>
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <label>Shift Pattern :</label>
+                <select asp-for="ShiftPattern" class="form-control">
+                    <option value="0">Select</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <label>User Mode :</label>
+                <select asp-for="UserMod" class="form-control">
+                    <option value="0">Select</option>
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <label>Status Flag :</label>
+                <select asp-for="StatusFlag" class="form-control">
+                    <option value="0">Select</option>
+                </select>
+            </div> *@
+           @*  <div class="col-lg-4">
+                <label>Shift Pattern :</label>
+                <select asp-for="ShiftPattern">
+                    <option value="0">Select</option>
+                </select>
+            </div> *@
+        </div>
+    </section>
+</div>
+<style>
+    .backstyle
+    {
+        color: brown;
+        background: rgba(255,255,255,0.6);
+        padding: 25px 50px 25px;
+        font-family: cursive;
+    }
+</style>
