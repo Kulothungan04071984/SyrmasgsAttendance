@@ -5,9 +5,11 @@ namespace SyrmaSGS.Models;
 
 public partial class EmployeeMaster
 {
-    public double? SNo { get; set; }
+    public double? Sno { get; set; }
 
-    public string? EmpCode { get; set; }
+    public int Employeemasterid { get; set; }
+
+    public string? Empcode { get; set; }
 
     public string? Empname { get; set; }
 
@@ -21,9 +23,11 @@ public partial class EmployeeMaster
 
     public string? DepartmentName { get; set; }
 
-    public string? SubDepartment { get; set; }
+    public string? Subdepartment { get; set; }
 
     public string? Unit { get; set; }
 
     public string? CategoryName { get; set; }
+
+    public bool? Isactive { get; set; }
 }

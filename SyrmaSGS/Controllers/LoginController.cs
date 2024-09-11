@@ -22,11 +22,11 @@ namespace SyrmaSGS.Controllers
             if (loginResult)
             {
                 return RedirectToAction("Attendance", "Attendance");
-                userLogin.Isactive=true;
+               // userLogin.Isactive=true;
             }
             else
             {
-                userLogin.Isactive = false;
+               // userLogin.Isactive = false;
                 return View(userLogin);
             }
         }

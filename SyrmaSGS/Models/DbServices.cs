@@ -27,7 +27,8 @@ namespace SyrmaSGS.Models
                               join dept in _context.DepartMentMasters on attendance.DepartMemtId equals dept.DeptId
                               join desi in _context.DesignationMasters on attendance.DesignationId equals desi.DesiId
                               join unit in _context.UnitMasters on attendance.UnitId equals unit.UnitId
-                              where attendance.CurrentDate == DateTime.Today && attendance.IsActive == true
+                              where attendance.CurrentDate == DateTime.Today && 
+                              attendance.IsActive == true
                               select new EmployeeDetails
                               {
                                   EMPLOYEEID = attendance.EmpId,
@@ -42,7 +43,7 @@ namespace SyrmaSGS.Models
 
                 objModel.employeeDetails=result;
                 objModel.overAllCount = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true).Count();
-                objModel.unit_1 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today&& a.UnitId == 2 && a.IsActive == true).Count();
+                objModel.unit_1 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 2 && a.IsActive == true).Count();
                 objModel.unit_2 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 3 && a.IsActive == true).Count();
                 objModel.unit_3 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 4 && a.IsActive == true).Count();
 
@@ -77,9 +78,10 @@ namespace SyrmaSGS.Models
             int insertResult = 0;
             try
             {
-                var empDetails = _context.EmployeeMasters.Where(a => a.EmpCode.ToString() == empid).FirstOrDefault();
+                var empDetails = _context.EmployeeMasters.Where(a => a.Empcode.ToString() == empid).FirstOrDefault();
                 var exsitTime = _context.AttendanceTransactionDetails
-                    .Where(a => a.CurrentDate == DateTime.Today && a.EmpId == empDetails.EmpCode.ToString())
+                    .Where(a => a.CurrentDate == DateTime.Today
+                    && a.EmpId == empDetails.Empcode.ToString())
                     .Select(a => new AttendanceTransactionDetail()
                     { TransId = a.TransId, EmpId = a.EmpId, StartTime = a.StartTime, EndTime = a.EndTime })
                     .OrderByDescending(a => a.TransId).FirstOrDefault();
@@ -171,7 +173,7 @@ namespace SyrmaSGS.Models
             int insertResults = 0;
             try
             {
-                timeDetails.EmpId = empDetails.EmpCode.ToString();
+                timeDetails.EmpId = empDetails.Empcode.ToString();
                 timeDetails.EmpName = empDetails.Empname;
                 timeDetails.DesignationId = Convert.ToInt32(empDetails.DesigName);
                 timeDetails.DepartMemtId = Convert.ToInt32(empDetails.DepartmentName);
@@ -207,7 +209,7 @@ namespace SyrmaSGS.Models
                 objEmployeeDetails.ddlSubDepartment = _context.SubDepartmentMasters.Where(a => a.IsActive == true).OrderBy(a=>a.SubDepartmentName).Select(e => new SelectListItem { Value = e.SubDepartmentid.ToString(), Text = e.SubDepartmentName }).ToList();
                 objEmployeeDetails.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
                 objEmployeeDetails.ddlUnit = _context.UnitMasters.Where(a => a.IsActive == true).OrderBy(a => a.UnitName).Select(e => new SelectListItem { Value = e.UnitId.ToString(), Text = e.UnitName }).ToList();
-                objEmployeeDetails.ddlUnit.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                objEmployeeDetails.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
                 return objEmployeeDetails;
             }
             catch (Exception ex)
