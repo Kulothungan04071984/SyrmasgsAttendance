@@ -171,11 +171,10 @@
 
 </style>
 <script>
-    $(document).ready(function (){
-        
+    $(document).ready(function () {
+
         var duplicate = $('#hdnduplicate').val();
-        if (duplicate)
-        {
+        if (duplicate) {
             //alert('Duplicate Entry');
             var $notification = $("#notification");
 
@@ -197,7 +196,7 @@
             setTimeout(function () {
                 $notification.removeClass("show");
             }, 3000); // Hide after 3 seconds
-          //  $('#txtEmpID').val('');
+            $('#txtEmpID').val('');
         }
 
         var Try = $('#hdntry').val();
@@ -210,10 +209,10 @@
             setTimeout(function () {
                 $notification.removeClass("show");
             }, 3000); // Hide after 3 seconds
-            //  $('#txtEmpID').val('');
+            $('#txtEmpID').val('');
         }
 
-    })
+    });
 
     document.getElementById('txtEmpID').addEventListener('input', function () {
         var barcodeValue = this.value;
@@ -238,30 +237,30 @@
         var cnt = 0;
         $('#tdEmployeeTable tbody tr').each(function () {
             cnt = cnt + 1;
-         //   debugger;
+            //   debugger;
             var rowText = $(this).find('td:first').html();
-           // var rowText = $(this).text().toLowerCase();
+            // var rowText = $(this).text().toLowerCase();
             //if (rowText.includes(searchValue)) {
             if (rowText == searchValue) {
-                
+
                 // if (cnt != 1) {
-                    
+
                 // }
                 found = true;
-                
+
                 return false;
             }
         });
 
         if (found) {
-           // $('#result').text('Value found in the table.');
+            // $('#result').text('Value found in the table.');
             $('#txtEmpID').val('');
-           // alert('found');
+            // alert('found');
             $(this).addClass('blink');
             return false;
         } else {
-           // $('#result').text('Value not found in the table.');
-           // alert('Not found');
+            // $('#result').text('Value not found in the table.');
+            // alert('Not found');
             return true;
         }
 
