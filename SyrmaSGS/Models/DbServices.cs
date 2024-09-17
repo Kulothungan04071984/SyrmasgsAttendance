@@ -12,7 +12,7 @@ namespace SyrmaSGS.Models
         {
             _context = context;
         }
-        public BarcodeViewModel GetEmployeeDetails()
+        public BarcodeViewModel GetEmployeeDetails(int insertresult)
         {
             var objModel = new BarcodeViewModel();
             try
@@ -46,7 +46,24 @@ namespace SyrmaSGS.Models
                 objModel.unit_1 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 2 && a.IsActive == true).Count();
                 objModel.unit_2 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 3 && a.IsActive == true).Count();
                 objModel.unit_3 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 4 && a.IsActive == true).Count();
-
+                if (insertresult == 2)
+                {
+                    objModel.duplicate = true;
+                    objModel.error = false;
+                    objModel.Try = false;
+                }
+                else if (insertresult == 1)
+                {
+                    objModel.duplicate = false;
+                    objModel.error = false;
+                    objModel.Try = false;
+                }
+                else if (insertresult == 3)
+                {
+                    objModel.duplicate = false;
+                    objModel.error = true;
+                    objModel.Try = false;
+                }
 
                 return objModel;
             }
@@ -192,6 +209,36 @@ namespace SyrmaSGS.Models
                 writeErrorMessage(ex.Message.ToString(), "insertvalues");
                 return insertResults;
             }
+        }
+
+        public List<EmployeeDetails> GetAttendancedetails(ReportView rview)
+        {
+            var result = (from attendance in _context.AttendanceTransactionDetails
+                          join dept in _context.DepartMentMasters on attendance.DepartMemtId equals dept.DeptId
+                          join desi in _context.DesignationMasters on attendance.DesignationId equals desi.DesiId
+                          join unit in _context.UnitMasters on attendance.UnitId equals unit.UnitId
+                          where attendance.StartTime >= rview.startDate && attendance.EndTime >= rview.endDate &&
+                          attendance.UnitId == (attendance.UnitId == 0 ? attendance.UnitId : rview.unitID)
+                          select new EmployeeDetails
+                          {
+                              EMPLOYEEID = attendance.EmpId,
+                              EMPLOYEENAME = attendance.EmpName,
+                              DEPARTMENT_NAME = dept.DepartMentName,
+                              DESIGNATION_NAME = desi.DesignationName,
+                              UNIT = unit.UnitName,
+                              STARTTIME = attendance.StartTime,
+                              ENDTIME = attendance.EndTime,
+                              CURRENTDATE= attendance.CurrentDate,
+                          }).ToList();
+
+            return result;
+        }
+
+        public List<SelectListItem> GetUnitDetails()
+        {
+            var unitlist= _context.UnitMasters.Where(a => a.IsActive == true).OrderBy(a => a.UnitName).Select(e => new SelectListItem { Value = e.UnitId.ToString(), Text = e.UnitName }).ToList();
+            unitlist.Insert(0, (new SelectListItem { Value = "0", Text = "All" }));
+            return unitlist;
         }
 
 

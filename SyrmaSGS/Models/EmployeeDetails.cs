@@ -56,6 +56,7 @@ namespace SyrmaSGS.Models
 
         public int UNITID { get; set; }
 
+        public DateTime? CURRENTDATE { get; set; }    
 
     }
 }

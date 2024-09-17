@@ -86,7 +86,7 @@
                 
                 @if(Model != null)
                 {
-                    @if(Model.employeeDetails.Count > 0)
+                    @if(Model.employeeDetails.Count > 0 && Model.employeeDetails != null)
                  {
                 @foreach (var item in Model.employeeDetails)
                 {
@@ -211,8 +211,21 @@
             }, 3000); // Hide after 3 seconds
             $('#txtEmpID').val('');
         }
+        var error = '@ViewBag.error'.toLowerCase() === 'true';
+        if (error) {
+    
+        var $notification = $("#Try");
+
+        $notification.addClass("show");
+
+        setTimeout(function () {
+            $notification.removeClass("show");
+        }, 3000); // Hide after 3 seconds
+        $('#txtEmpID').val('');
+        }
 
     });
+   
 
     document.getElementById('txtEmpID').addEventListener('input', function () {
         var barcodeValue = this.value;

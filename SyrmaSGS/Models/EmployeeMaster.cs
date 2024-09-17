@@ -5,8 +5,6 @@ namespace SyrmaSGS.Models;
 
 public partial class EmployeeMaster
 {
-   // public double? Sno { get; set; }
-
     public int Employeemasterid { get; set; }
 
     public string? Empcode { get; set; }

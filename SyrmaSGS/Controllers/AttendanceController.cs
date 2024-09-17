@@ -15,8 +15,8 @@ namespace SyrmaSGS.Controllers
         public IActionResult Attendance()
         {
             BarcodeViewModel objViewModel=new BarcodeViewModel();
-            objViewModel = _iServicescs.GetEmployeeDetails();
-           // objViewModel=_iServicescs.GetEmployeeDetail();
+            objViewModel = _iServicescs.GetEmployeeDetails(0);
+           
             return View(objViewModel);
         }
 
@@ -33,6 +33,7 @@ namespace SyrmaSGS.Controllers
             // EmployeeMaster empDetails = new EmployeeMaster();
             // if (ModelState.IsValid)
             //{
+            BarcodeViewModel viewModel=new BarcodeViewModel();
             try
             {
                 if (model != null)
@@ -45,41 +46,48 @@ namespace SyrmaSGS.Controllers
                     // Clear the input field after processing
                     // ModelState.Clear();
                     int insertresult = _iServicescs.InsertEmployeeTimesheet(scannedValue);
-                    if (insertresult == 2)
-                    {
-                        model.duplicate = true;
-                        model.error = false;
-                        model.Try = false;
-                    }
-                    else if (insertresult == 1)
-                    {
-                        model.duplicate = false;
-                        model.error = false;
-                        model.Try = false;
-                    }
-                    else if (insertresult == 3)
-                    {
-                        model.duplicate = false;
-                        model.error = true;
-                        model.Try = false;
-                    }
+                    model = _iServicescs.GetEmployeeDetails(insertresult);
+                    //if (insertresult == 2)
+                    //{
+                    //    model.duplicate = true;
+                    //    model.error = false;
+                    //    model.Try = false;
+                    //}
+                    //else if (insertresult == 1)
+                    //{
+                    //    model.duplicate = false;
+                    //    model.error = false;
+                    //    model.Try = false;
+                    //}
+                    //else if (insertresult == 3)
+                    //{
+                    //    model.duplicate = false;
+                    //    model.error = true;
+                    //    model.Try = false;
+                    //}
+                    viewModel = model;
                 }
                 else if (model == null)
                 {
-                    model.duplicate = false;
-                    model.error = false;
-                    model.Try = true;
+                    //model.duplicate = false;
+                    //model.error = false;
+                    //model.Try = true;
+                    ViewBag.error = "true";
+                    
                 }
-                model = _iServicescs.GetEmployeeDetails();
-               // model = _iServicescs.GetEmployeeDetail();
+                return View(viewModel);
+
+                // model = _iServicescs.GetEmployeeDetail();
                 //}
 
-                return View(model);
+                
             }
             catch (Exception ex)
             {
-                return View(model);
+
+                return View(viewModel);
             }
+            
         }
     }
 }

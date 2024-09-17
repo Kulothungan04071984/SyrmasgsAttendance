@@ -1,0 +1,111 @@
+﻿@model ReportView
+@{
+    ViewData["Title"] = "AttendanceReport";
+}
+
+
+<div class="container">
+    <section>
+        
+        <div style="padding:1%;font-size:small;font-family: cursive;color: firebrick; font-weight:bold;">
+            <form asp-action="AttendanceReport" method="post">
+            <div>
+            <div class="row" style="padding:1%;">
+                <div class="col-lg-4">
+                    <span>From Date :</span>
+                    <input type="date" asp-for="startDate"   class="form-control" />
+                </div>
+                <div class="col-lg-4">
+                    <span>To Date :</span>
+                    <input type="date" asp-for="endDate" class="form-control" />
+                </div>
+                <div class="col-lg-4">
+                    <span>Unit Waise :</span>
+                            <select asp-for="unitID" asp-items="Model.lstUnitidItems" class="form-control"></select>
+                </div>
+            </div>
+            <div class="row" style="padding:1%;">
+                <div class="col-lg-0" style="text-align:right;">
+<button type="submit" class="btn btn-primary" id="btnSearch" name="Search" value="Search">
+    Search
+</button>
+                </div>
+            </div>
+            </div>
+        </form>
+            <div class="card" style="padding:1%;">
+                <div class="card-body">
+            <div class="row">
+                <div class="col-lg-0">
+                    <table class="table table-primary table-bordered">
+                        <thead>
+                        <tr>
+                            <th>
+                                Employee ID
+                            </th>
+                            <th>
+                                Employee Name
+                            </th>
+                            <th>
+                                Department Name
+                            </th>
+                            <th>
+                                Designation Name
+                            </th>
+                            <th>
+                                Unit Name
+                            </th>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                Start Time
+                            </th>
+                            <th>
+                                End Time
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @if(Model != null)
+                            {
+                                @if(Model.lstEmployeeDetails != null)
+                                {
+                            @foreach (var item in Model.lstEmployeeDetails)
+                                    {
+                                    
+                            <tr>
+                                <td>@item.EMPLOYEEID</td>
+                                <td>@item.EMPLOYEENAME</td>
+                                <td>@item.DEPARTMENT_NAME</td>
+                                <td>@item.DESIGNATION_NAME</td>
+                                <td>@item.UNIT</td>
+                                <td>@item.CURRENTDATE</td>
+                                <td>@item.STARTTIME</td>
+                                <td>@item.ENDTIME</td>
+                            </tr>
+                                    }
+                                    }
+                                        else
+                                        {
+                                            <tr><td colspan="8">Nodata Found</td></tr>
+                                        }
+
+                                    }
+                                    
+                                    else
+                                    {
+                                    <tr><td colspan="8">Nodata Found</td></tr>
+                                    }
+                                    
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
