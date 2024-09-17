@@ -127,7 +127,6 @@ public partial class SyrmasgsAttendanceContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("GENDER");
             entity.Property(e => e.Isactive).HasColumnName("ISACTIVE");
-            entity.Property(e => e.Sno).HasColumnName("SNO");
             entity.Property(e => e.Subdepartment)
                 .HasMaxLength(255)
                 .HasColumnName("SUBDEPARTMENT");
