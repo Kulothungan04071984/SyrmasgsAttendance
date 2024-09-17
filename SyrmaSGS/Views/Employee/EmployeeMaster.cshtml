@@ -8,7 +8,7 @@
     <h3>EmployeeMaster</h3>
     
     <section>
-        <form asp-action="insertEmployeeMaster" method="post" style="font-size:100%;">
+        <form id="employeeForm" asp-action="EmployeeMaster" method="post" style="font-size:100%;">
         <div class="row">
             <div class="col-lg-0">
                 <label>Employee ID :</label>
@@ -57,11 +57,11 @@
             </div>
             <div class="col-lg-4">
                 <label>Department :</label>
-                <select asp-for="DEPARTMENTID" asp-items="Model.ddlDepartment" class="form-control"></select>
+                 <select id="DEPARTMENTID" asp-for="DEPARTMENTID" asp-items="Model.ddlDepartment" class="form-control"></select>
             </div>
             <div class="col-lg-4">
                 <label>SubDepartment :</label>
-                <select asp-for="SUBDEPARTMENTID" asp-items="Model.ddlSubDepartment" class="form-control"></select>
+                 <select id="SUBDEPARTMENTID" asp-for="SUBDEPARTMENTID" asp-items="Model.ddlSubDepartment" class="form-control"></select>
             </div>
         </div>
             <div class="row" style="padding:1%">
@@ -124,7 +124,7 @@
         <div class="row" style="padding-left:87%;padding-top:1%;">
             <div class="col-lg-0">
                 <input type="submit" id="btnSave" name="Save" value="Save"  class="btn btn-primary"/>
-                <input type="button" id="btnSave" name="Clear" value="Clear"  class="btn btn-info" />
+                <input type="button" id="btnSave" name="Clear" value="Clear" class="btn btn-info" onclick="clearForm()" />
             </div>
         </div>
         </form>
@@ -139,3 +139,45 @@
         font-family: cursive;
     }
 </style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Function to clear the form
+        function clearForm() {
+            document.getElementById("employeeForm").reset();
+        }
+
+        // Event handler for department dropdown change
+        $('#DEPARTMENTID').change(function () {
+            var departmentId = $(this).val();
+
+            if (departmentId > 0) {
+                $.ajax({
+                    url: '@Url.Action("Subdepartment", "EmployeeController")', // Adjust the URL accordingly
+                    type: 'GET',
+                    data: { departmentId: departmentId },
+                    success: function (data) {
+                        var $subDepartmentDropdown = $('#SUBDEPARTMENTID');
+                        $subDepartmentDropdown.empty(); // Clear existing options
+                        $.each(data, function (index, item) {
+                            $subDepartmentDropdown.append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    },
+                    error: function () {
+                        alert('Failed to load sub-departments.');
+                    }
+                });
+            } else {
+                // Clear the sub-department dropdown if no department is selected
+                $('#SUBDEPARTMENTID').empty();
+                $('#SUBDEPARTMENTID').append($('<option>', {
+                    value: "0",
+                    text: "Select"
+                }));
+            }
+        });
+    });
+</script>

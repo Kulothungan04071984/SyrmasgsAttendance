@@ -27,7 +27,7 @@ namespace SyrmaSGS.Models
                               join dept in _context.DepartMentMasters on attendance.DepartMemtId equals dept.DeptId
                               join desi in _context.DesignationMasters on attendance.DesignationId equals desi.DesiId
                               join unit in _context.UnitMasters on attendance.UnitId equals unit.UnitId
-                              where attendance.CurrentDate == DateTime.Today && 
+                              where attendance.CurrentDate == DateTime.Today &&
                               attendance.IsActive == true
                               select new EmployeeDetails
                               {
@@ -41,7 +41,7 @@ namespace SyrmaSGS.Models
 
                               }).ToList();
 
-                objModel.employeeDetails=result;
+                objModel.employeeDetails = result;
                 objModel.overAllCount = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true).Count();
                 objModel.unit_1 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 2 && a.IsActive == true).Count();
                 objModel.unit_2 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 3 && a.IsActive == true).Count();
@@ -55,7 +55,7 @@ namespace SyrmaSGS.Models
                 writeErrorMessage(ex.Message.ToString(), "InsertEmployeeTimesheet");
                 return new BarcodeViewModel();
             }
-            
+
         }
 
         public bool loginValidation(UserLogin userLogin)
@@ -66,7 +66,7 @@ namespace SyrmaSGS.Models
                 result = _context.UserLogins.Where(a => a.Userid == userLogin.Userid && a.Userpassword == userLogin.Userpassword).Any();
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 writeErrorMessage(ex.Message.ToString(), "loginValidation");
                 return result;
@@ -194,6 +194,8 @@ namespace SyrmaSGS.Models
             }
         }
 
+
+
         public EmployeeDetails GetEmployeeDetail()
         {
             EmployeeDetails objEmployeeDetails = new EmployeeDetails();
@@ -206,16 +208,76 @@ namespace SyrmaSGS.Models
                 // objEmployeeDetails.unit_3 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 4 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
                 objEmployeeDetails.ddlDepartment = _context.DepartMentMasters.Where(a => a.IsActive == true).OrderBy(a => a.DepartMentName).Select(e => new SelectListItem { Value = e.DeptId.ToString(), Text = e.DepartMentName }).ToList();
                 objEmployeeDetails.ddlDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
-                objEmployeeDetails.ddlSubDepartment = _context.SubDepartmentMasters.Where(a => a.IsActive == true).OrderBy(a=>a.SubDepartmentName).Select(e => new SelectListItem { Value = e.SubDepartmentid.ToString(), Text = e.SubDepartmentName }).ToList();
-                objEmployeeDetails.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                //objEmployeeDetails.ddlSubDepartment = _context.SubDepartmentMasters.Where(a => a.DDpartmentname == departmentId && a.IsActive==true).OrderBy(a => a.SubDepartmentName).Select(e => new SelectListItem{Value = e.SubDepartmentid.ToString(),Text = e.SubDepartmentName}).ToList();
+                //objEmployeeDetails.ddlSubDepartment.Insert(0, new SelectListItem { Value = "0", Text = "Select" });
+                ////objEmployeeDetails.ddlSubDepartment = _context.SubDepartmentMasters.Where(a => a.IsActive == true).OrderBy(a => a.SubDepartmentName).Select(e => new SelectListItem { Value = e.SubDepartmentid.ToString(), Text = e.SubDepartmentName }).ToList();
+                //objEmployeeDetails.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                objEmployeeDetails.ddlDesignation = _context.DesignationMasters.Where(a => a.IsActive == true).OrderBy(a => a.DesignationName).Select(e => new SelectListItem { Value = e.DesiId.ToString(), Text = e.DesignationName }).ToList();
+                objEmployeeDetails.ddlDesignation.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                objEmployeeDetails.ddlCategory = _context.EmployeeMasters.Where(a => a.Isactive == true).GroupBy(a => a.CategoryName).Select(g => new SelectListItem { Value = g.Key, Text = g.Key }).OrderBy(item => item.Text).ToList();
+                objEmployeeDetails.ddlCategory.Insert(0, new SelectListItem { Value = "0", Text = "Select" });
                 objEmployeeDetails.ddlUnit = _context.UnitMasters.Where(a => a.IsActive == true).OrderBy(a => a.UnitName).Select(e => new SelectListItem { Value = e.UnitId.ToString(), Text = e.UnitName }).ToList();
                 objEmployeeDetails.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+
                 return objEmployeeDetails;
             }
             catch (Exception ex)
             {
                 writeErrorMessage(ex.Message.ToString(), "GetEmployeeDetail");
                 return objEmployeeDetails;
+            }
+        }
+
+        public SubDepartmentMaster GetSubdepartmentmasters(string departmentId)
+        {
+            SubDepartmentMaster objSubdepartmentmasters = new SubDepartmentMaster();
+            try
+            {
+
+                objSubdepartmentmasters.ddlSubDepartment = _context.SubDepartmentMasters.Where(a => a.DDpartmentname == departmentId && a.IsActive == true).OrderBy(a => a.SubDepartmentName).Select(e => new SelectListItem { Value = e.SubDepartmentid.ToString(), Text = e.SubDepartmentName }).ToList();
+                objSubdepartmentmasters.ddlSubDepartment.Insert(0, new SelectListItem { Value = "0", Text = "Select" });
+
+
+                return objSubdepartmentmasters;
+            }
+            catch (Exception ex)
+            {
+                writeErrorMessage(ex.Message.ToString(), "GetSubdepartmentmasters");
+                return objSubdepartmentmasters;
+            }
+        }
+
+        public int CreateEmployeeDetail(EmployeeMaster employee)
+        {
+            EmployeeMaster objEmployeeMaster = new EmployeeMaster();
+            int insertResult = 0;
+            try
+            {
+                //// objEmployeeDetails.employeeMaster = _context.EmployeeMasters.Where(a => a.EmpCode == Convert.ToString(empid) ).FirstOrDefault();
+                // objEmployeeDetails.overAllCount = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.IsActive == true).Count();
+                // objEmployeeDetails.unit_1 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 2 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
+                // objEmployeeDetails.unit_2 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 3 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
+                // objEmployeeDetails.unit_3 = _context.AttendanceTransactionDetails.Where(a => a.CurrentDate == DateTime.Today && a.UnitId == 4 && a.IsActive == true).GroupBy(a => a.UnitId).Count();
+                //objEmployeeMaster.Empcode = employee.Empcode;
+                //objEmployeeMaster.ddlDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                //objEmployeeMaster.ddlSubDepartment = _context.SubDepartmentMasters.Where(a => a.IsActive == true).OrderBy(a => a.SubDepartmentName).Select(e => new SelectListItem { Value = e.SubDepartmentid.ToString(), Text = e.SubDepartmentName }).ToList();
+                //objEmployeeMaster.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                //objEmployeeMaster.ddlDesignation = _context.DesignationMasters.Where(a => a.IsActive == true).OrderBy(a => a.DesignationName).Select(e => new SelectListItem { Value = e.DesiId.ToString(), Text = e.DesignationName }).ToList();
+                //objEmployeeMaster.ddlDesignation.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                //objEmployeeMaster.ddlCategory = _context.EmployeeMasters.Where(a => a.Isactive == true).GroupBy(a => a.CategoryName).Select(g => new SelectListItem { Value = g.Key, Text = g.Key }).OrderBy(item => item.Text).ToList();
+                //objEmployeeMaster.ddlCategory.Insert(0, new SelectListItem { Value = "0", Text = "Select" });
+                //objEmployeeMaster.ddlUnit = _context.UnitMasters.Where(a => a.IsActive == true).OrderBy(a => a.UnitName).Select(e => new SelectListItem { Value = e.UnitId.ToString(), Text = e.UnitName }).ToList();
+                //objEmployeeMaster.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+                _context.EmployeeMasters.Add(employee);
+                _context.SaveChanges();
+                insertResult = 1;
+                return insertResult;
+            }
+            catch (Exception ex)
+            {
+                insertResult = 0;
+                writeErrorMessage(ex.Message.ToString(), "GetEmployeeDetail");
+                return insertResult;
             }
         }
 

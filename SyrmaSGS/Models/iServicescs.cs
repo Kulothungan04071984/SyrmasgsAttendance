@@ -9,5 +9,10 @@
 
         EmployeeDetails GetEmployeeDetail();
 
+        SubDepartmentMaster GetSubdepartmentmasters(string departmentId);
+
+
+        int CreateEmployeeDetail(EmployeeMaster employee);
+
     }
 }

@@ -1,6 +1,8 @@
 ﻿//using AspNetCore;
 //using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SyrmaSGS.Models;
 
 namespace SyrmaSGS.Controllers
@@ -14,13 +16,19 @@ namespace SyrmaSGS.Controllers
         {
             _iServicescs = servicescs;
         }
-        public ActionResult EmployeeMaster()
+        public ActionResult EmployeeMaster(string departmentId)
         {
             var empDetails = _iServicescs.GetEmployeeDetail();
             return View(empDetails);
         }
 
-        
+        public ActionResult Subdepartment(string departmentId)
+        {
+            var empDetails = _iServicescs.GetSubdepartmentmasters(departmentId);
+            return View(empDetails);
+        }
+
+
 
         // GET: EmployeeController/Details/5
         public ActionResult Details(int id)
@@ -37,16 +45,33 @@ namespace SyrmaSGS.Controllers
         // POST: EmployeeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult EmployeeMaster(EmployeeDetails model)
         {
-            try
+            EmployeeDetails empty = new EmployeeDetails();
+            int result = 0;
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                var employee = new EmployeeMaster
+                {
+                    //Employeemasterid = model.Employeemasterid,
+                    Empcode = model.EMPLOYEEID,
+                    Empname = model.EMPLOYEENAME,
+                    Dob =Convert.ToDateTime(model.DOB),
+                    Doj =Convert.ToDateTime(model.DOJ),
+                    Gender = model.GENDER,
+                    DesigName = model.DESIGNATIONID.ToString(),
+                    DepartmentName = model.DEPARTMENTID.ToString(),
+                    Subdepartment = model.SUBDEPARTMENTID.ToString(),
+                    Unit = model.UNITID.ToString(),
+                    CategoryName = model.CATEGORYID.ToString(),
+                    Isactive = true,
+                };
+
+                result = _iServicescs.CreateEmployeeDetail(employee);
+               
+               
             }
-            catch
-            {
-                return View();
-            }
+            return View(empty);
         }
 
         // GET: EmployeeController/Edit/5
