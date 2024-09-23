@@ -268,7 +268,7 @@ namespace SyrmaSGS.Models
                 objEmployeeDetails.ddlCategory = _context.EmployeeMasters.Where(a => a.Isactive == true).GroupBy(a => a.CategoryName).Select(g => new SelectListItem { Value = g.Key, Text = g.Key }).OrderBy(item => item.Text).ToList();
                 objEmployeeDetails.ddlCategory.Insert(0, new SelectListItem { Value = "0", Text = "Select" });
                 objEmployeeDetails.ddlUnit = _context.UnitMasters.Where(a => a.IsActive == true).OrderBy(a => a.UnitName).Select(e => new SelectListItem { Value = e.UnitId.ToString(), Text = e.UnitName }).ToList();
-                objEmployeeDetails.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
+               // objEmployeeDetails.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
 
                 return objEmployeeDetails;
             }
@@ -278,6 +278,50 @@ namespace SyrmaSGS.Models
                 return objEmployeeDetails;
             }
         }
+
+        //public List<SelectListItem>  GetSubdepartmentmasters(string departmentId)
+        //{
+        //    SubDepartmentMaster objSubdeptDetails = new SubDepartmentMaster();
+        //    try
+        //    {
+        //        objSubdeptDetails.ddlSubDepartment = _context.SubDepartmentMasters.
+        //        Where(a => a.DDpartmentname == departmentId && a.IsActive == true).OrderBy(a => a.SubDepartmentName).Select(e => new SelectListItem { Value = e.SubDepartmentid.ToString(), Text = e.SubDepartmentName }).ToList();
+        //        objSubdeptDetails.ddlSubDepartment.Insert(0, new SelectListItem { Value = "0", Text = "Select" });
+
+
+
+        //        return objSubdeptDetails.ddlSubDepartment;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        writeErrorMessage(ex.Message.ToString(), "GetSubdeptDetail");
+        //        return objSubdeptDetails.ddlSubDepartment;
+        //    }
+        //}
+
+        public List<SubDepartmentMaster> GetSubdepartmentmasters(string departmentId)
+        {
+            try
+            {
+                var subDepartmentList = _context.SubDepartmentMasters
+                    .Where(a => a.Departmentid ==Convert.ToInt32(departmentId) && a.IsActive == true)
+                    .OrderBy(a => a.SubDepartmentName)
+                    .Select(e => new SubDepartmentMaster
+                    {
+                        SubDepartmentid = e.SubDepartmentid, // Ensure these properties exist
+                        SubDepartmentName = e.SubDepartmentName
+                    })
+                    .ToList();
+
+                return objSubdepartmentmasters;
+            }
+            catch (Exception ex)
+            {
+                writeErrorMessage(ex.Message.ToString(), "GetSubdepartmentmasters");
+                return objSubdepartmentmasters;
+            }
+        }
+
 
         //public SubDepartmentMaster GetSubdepartmentmasters(string departmentId)
         //{

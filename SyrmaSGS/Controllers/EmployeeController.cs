@@ -22,11 +22,11 @@ namespace SyrmaSGS.Controllers
             return View(empDetails);
         }
 
-        //public ActionResult Subdepartment(string departmentId)
-        //{
-        //    var empDetails = _iServicescs.GetSubdepartmentmasters(departmentId);
-        //    return View(empDetails);
-        //}
+        public JsonResult subdepartment(string departmentId)
+        {
+            var subdeptDetails = _iServicescs.GetSubdepartmentmasters(departmentId);
+            return Json(subdeptDetails);
+        }
 
 
 

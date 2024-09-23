@@ -15,7 +15,7 @@ namespace SyrmaSGS.Models
 
         List<EmployeeDetails> GetAttendancedetails(ReportView rview);
 
-       // SubDepartmentMaster GetSubdepartmentmasters(string departmentId);
+        List<SubDepartmentMaster> GetSubdepartmentmasters(string departmentId);
 
 
         int CreateEmployeeDetail(EmployeeMaster employee);

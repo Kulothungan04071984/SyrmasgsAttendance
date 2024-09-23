@@ -3,6 +3,8 @@
     ViewData["Title"] = "EmployeeMaster";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 
 <div class="container backstyle">
     <h3>EmployeeMaster</h3>
@@ -31,11 +33,11 @@
             </div> *@
             <div class="col-lg-4">
                 <label>Date of Birth :</label>
-                <input type="datetime" class="form-control" asp-for="DOB" />
+                <input type="date" class="form-control" asp-for="DOB" />
             </div>
             <div class="col-lg-4">
                 <label>Date of Joining :</label>
-                <input type="datetime" class="form-control" asp-for="DOJ" />
+                <input type="date" class="form-control" asp-for="DOJ" />
             </div>
         </div>
        @*  <div class="row">
@@ -47,7 +49,7 @@
         </div> *@
             <div class="row" style="padding:1%">
             <div class="col-lg-4">
-                <label>Gendar :</label>
+                <label>Gender :</label>
                 <select class="form-control" asp-for="GENDER">
                     <option value="0">Select</option>
                     <option value="1">Male</option>
@@ -61,7 +63,7 @@
             </div>
             <div class="col-lg-4">
                 <label>SubDepartment :</label>
-                 <select id="SUBDEPARTMENTID" asp-for="SUBDEPARTMENTID" asp-items="Model.ddlSubDepartment" class="form-control"></select>
+                 <select id="SUBDEPARTMENTID" class="form-control"></select>
             </div>
         </div>
             <div class="row" style="padding:1%">
@@ -141,28 +143,29 @@
 </style>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        // Function to clear the form
-        function clearForm() {
-            document.getElementById("employeeForm").reset();
-        }
+    // Function to clear the form
+    function clearForm() {
+        document.getElementById("employeeForm").reset();
+    }
 
+    $(document).ready(function () {
         // Event handler for department dropdown change
         $('#DEPARTMENTID').change(function () {
-            var departmentId = $(this).val();
+            debugger;
+            var departmentid = $(this).val();
 
-            if (departmentId > 0) {
+            if (departmentid > 0) {
                 $.ajax({
-                    url: '@Url.Action("Subdepartment", "EmployeeController")', // Adjust the URL accordingly
+                    url: '@Url.Action("Subdepartment", "Employee")', // Adjust the URL accordingly
                     type: 'GET',
-                    data: { departmentId: departmentId },
+                    data: { departmentId: departmentid },
                     success: function (data) {
                         var $subDepartmentDropdown = $('#SUBDEPARTMENTID');
                         $subDepartmentDropdown.empty(); // Clear existing options
                         $.each(data, function (index, item) {
                             $subDepartmentDropdown.append($('<option>', {
-                                value: item.value,
-                                text: item.text
+                                value: item.subDepartmentid,
+                                text: item.subDepartmentName
                             }));
                         });
                     },
@@ -181,3 +184,4 @@
         });
     });
 </script>
+
