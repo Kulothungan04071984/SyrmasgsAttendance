@@ -171,11 +171,8 @@ public partial class SyrmasgsAttendanceContext : DbContext
 
         modelBuilder.Entity<UserLogin>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("UserLogin");
+            entity.ToTable("UserLogin");
 
-            entity.Property(e => e.UserLoginId).ValueGeneratedOnAdd();
             entity.Property(e => e.Userid).HasMaxLength(125);
             entity.Property(e => e.Userpassword).HasMaxLength(125);
         });

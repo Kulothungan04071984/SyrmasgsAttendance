@@ -195,6 +195,8 @@ namespace SyrmaSGS.Models
                 timeDetails.DesignationId = Convert.ToInt32(empDetails.DesigName);
                 timeDetails.DepartMemtId = Convert.ToInt32(empDetails.DepartmentName);
                 timeDetails.UnitId = Convert.ToInt32(empDetails.Unit);
+                //DateTime dateTime = DateTime.Today;
+                //string dateTimestring = dateTime.ToString("MM-dd-yyyy");
                 timeDetails.CurrentDate = DateTime.Today;
                 timeDetails.IsActive = true;
                 DateTime now = DateTime.Now;
@@ -213,12 +215,14 @@ namespace SyrmaSGS.Models
 
         public List<EmployeeDetails> GetAttendancedetails(ReportView rview)
         {
+            
             var result = (from attendance in _context.AttendanceTransactionDetails
                           join dept in _context.DepartMentMasters on attendance.DepartMemtId equals dept.DeptId
                           join desi in _context.DesignationMasters on attendance.DesignationId equals desi.DesiId
                           join unit in _context.UnitMasters on attendance.UnitId equals unit.UnitId
-                          where attendance.StartTime >= rview.startDate && attendance.EndTime >= rview.endDate &&
-                          attendance.UnitId == (attendance.UnitId == 0 ? attendance.UnitId : rview.unitID)
+                          where (attendance.CurrentDate >=rview.startDate && attendance.CurrentDate <= rview.endDate) 
+                          && attendance.UnitId == (rview.unitID == 0 ? attendance.UnitId : rview.unitID)
+                          orderby attendance.StartTime descending
                           select new EmployeeDetails
                           {
                               EMPLOYEEID = attendance.EmpId,
@@ -275,24 +279,24 @@ namespace SyrmaSGS.Models
             }
         }
 
-        public SubDepartmentMaster GetSubdepartmentmasters(string departmentId)
-        {
-            SubDepartmentMaster objSubdepartmentmasters = new SubDepartmentMaster();
-            try
-            {
+        //public SubDepartmentMaster GetSubdepartmentmasters(string departmentId)
+        //{
+        //    SubDepartmentMaster objSubdepartmentmasters = new SubDepartmentMaster();
+        //    try
+        //    {
 
-                objSubdepartmentmasters.ddlSubDepartment = _context.SubDepartmentMasters.Where(a => a.DDpartmentname == departmentId && a.IsActive == true).OrderBy(a => a.SubDepartmentName).Select(e => new SelectListItem { Value = e.SubDepartmentid.ToString(), Text = e.SubDepartmentName }).ToList();
-                objSubdepartmentmasters.ddlSubDepartment.Insert(0, new SelectListItem { Value = "0", Text = "Select" });
+        //        objSubdepartmentmasters.ddlSubDepartment = _context.SubDepartmentMasters.Where(a => a.DDpartmentname == departmentId && a.IsActive == true).OrderBy(a => a.SubDepartmentName).Select(e => new SelectListItem { Value = e.SubDepartmentid.ToString(), Text = e.SubDepartmentName }).ToList();
+        //        objSubdepartmentmasters.ddlSubDepartment.Insert(0, new SelectListItem { Value = "0", Text = "Select" });
 
 
-                return objSubdepartmentmasters;
-            }
-            catch (Exception ex)
-            {
-                writeErrorMessage(ex.Message.ToString(), "GetSubdepartmentmasters");
-                return objSubdepartmentmasters;
-            }
-        }
+        //        return objSubdepartmentmasters;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        writeErrorMessage(ex.Message.ToString(), "GetSubdepartmentmasters");
+        //        return objSubdepartmentmasters;
+        //    }
+        //}
 
         public int CreateEmployeeDetail(EmployeeMaster employee)
         {

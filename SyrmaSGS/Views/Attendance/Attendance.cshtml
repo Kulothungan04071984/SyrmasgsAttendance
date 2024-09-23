@@ -86,12 +86,14 @@
                 
                 @if(Model != null)
                 {
-                    @if(Model.employeeDetails.Count > 0 && Model.employeeDetails != null)
-                 {
-                @foreach (var item in Model.employeeDetails)
-                {
-                    <tr>
-                        <td>@item.EMPLOYEEID</td>
+                                    @if (Model.employeeDetails != null)
+                                    {
+                    @if(Model.employeeDetails.Count > 0 ){
+                 
+                                        @foreach (var item in Model.employeeDetails)
+                                        {
+                                            <tr>
+                                                <td>@item.EMPLOYEEID</td>
                         <td>@item.EMPLOYEENAME</td>
                         <td>@item.DEPARTMENT_NAME</td>
                         <td>@item.DESIGNATION_NAME</td>
@@ -99,13 +101,19 @@
                         <td> @item.STARTTIME </td>
                         <td> @item.ENDTIME </td>
                     </tr>
-                }
+                                        }
                                        
                                     }
                                     else
                                     {
                                         <tr class="NoData"><td colspan="7">No Data Found</td></tr>
                                     }
+                                    }
+                                    else
+                                    {
+                                        <tr class="NoData"><td colspan="7">No Data Found</td></tr>
+                                    }
+
                 }
                                 else
                                 {
@@ -280,10 +288,10 @@
 
     }
 
-    function insertAttendancedata(insertdata)
-    {
+    // function insertAttendancedata(insertdata)
+    // {
 
-    }
+    // }
 
     function getEmployeeDetails() {
 
