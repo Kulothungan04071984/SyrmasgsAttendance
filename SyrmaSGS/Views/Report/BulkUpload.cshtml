@@ -1,0 +1,85 @@
+﻿@model List<EmployeeMaster>
+@{
+    ViewData["Title"] = "BulkUpload";
+}
+
+<h1 style="color:brown;padding:1%;">Bulk Upload</h1>
+<div class="container">
+    <section>
+        <form asp-action="BulkUpload" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-lg-6">
+            @* <span>Bulk Upload :  </span> *@
+            <input type="file" class="form-control" name="file" />
+        </div>
+        <div class="col-lg-6" style="margin-top">
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </div>
+        </form>
+        <form asp-action="UploadDetails" method="post" style="padding:1%;">
+               @if(Model != null)
+                    {
+            <div class="row">
+                
+                <div class="col-lg-12">
+                    <div class="card" >
+                        <div class="card-body">
+                            <div>
+                <table style="padding:1%;" >
+                    <tr>
+                                        <td style="width:0%;text-align:left;">Employee Code</td>
+                                        <td style="width:0%;text-align:left;">Employee Name</td>
+                                        <td style="width:0%;text-align:left;">DOB</td>
+                                        <td style="width:0%;text-align:left;">DOJ</td>
+                                        <td style="width:0%;text-align:left;">Gender</td>
+                                        <td style="width:0%;text-align:left;">Designation Name</td>
+                                        <td style="width:0%;text-align:left;">Department Name</td>
+                                        <td style="width:0%;text-align:left;">SubDepartment Name</td>
+                                        <td style="width:0%;text-align:left;">Unit</td>
+                                        <td style="width:0%;text-align:left;">Category Name</td>
+                        <td class="hide">IsActive</td>
+                    </tr>
+                   
+                    @foreach (var item in Model.Select((value,index)=> new {value,index}))
+                    {
+                        <tbody class="border">
+                        <tr>
+                                                <td><input type="text" name="[@item.index].Empcode" value="@item.value.Empcode" /></td>
+                                                <td><input type="text" name="[@item.index].Empname" value="@item.value.Empname" /></td>
+                                                <td><input type="text" name="[@item.index].Dob" value="@item.value.Dob"  /></td>
+                                                <td><input type="text" name="[@item.index].Doj" value="@item.value.Doj" /></td>
+                                                <td><input type="text" name="[@item.index].Gender" value="@item.value.Gender"  /></td>
+                                                <td><input type="text" name="[@item.index].DesigName" value="@item.value.DesigName"  /></td>
+                                                <td><input type="text" name="[@item.index].DepartmentName" value="@item.value.DepartmentName"  /></td>
+                                                <td><input type="text" name="[@item.index].Subdepartment" value="@item.value.Subdepartment"  /></td>
+                                                <td><input type="text" name="[@item.index].Unit" value="@item.value.Unit"  /></td>
+                                                <td><input type="text" name="[@item.index].CategoryName" value="@item.value.CategoryName"  /></td>
+                                                <td class="hide"><input type="text" name="[@item.index].Isactive" value="@item.value.Isactive" /></td>
+                        </tr>
+                                        </tbody>
+                    }
+                    
+                </table>
+                                </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row" style="padding:1%;">
+                    <div class="col-lg-12">
+                        <button type="submit" id="btnSubmit" class="btn btn-success">Submit</button>
+                    </div>
+                </div>
+            </div>
+                    }
+        </form>
+    </section>
+</div>
+
+<style>
+   td input[type="text"] {
+        border: none;
+    }
+</style>

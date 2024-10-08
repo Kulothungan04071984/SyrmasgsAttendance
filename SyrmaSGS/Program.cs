@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using SyrmaSGS.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // or LicenseContext.Commercial
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

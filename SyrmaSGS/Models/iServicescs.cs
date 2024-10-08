@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace SyrmaSGS.Models
 {
@@ -19,6 +20,8 @@ namespace SyrmaSGS.Models
 
 
         int CreateEmployeeDetail(EmployeeMaster employee);
+
+        int InsertBulkUploads(List<EmployeeMaster> employeeDetails);
 
     }
 }

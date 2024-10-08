@@ -14,14 +14,14 @@
         <div class="row">
             <div class="col-lg-0">
                 <label>Employee ID :</label>
-                <input type="text" class="form-control" asp-for="EMPLOYEEID" style="width:32%;" />
+                <input type="text" class="form-control" asp-for="EMPLOYEEID" id="txtEmployeeid" style="width:32%;" />
             </div>
             </div>
       
         <div class="row" style="padding:1%">
             <div class="col-lg-4">
                 <label>Employee Name :</label>
-                <input type="text" class="form-control" asp-for="EMPLOYEENAME" />
+                <input type="text" class="form-control" asp-for="EMPLOYEENAME" id="txtEmployeeName" />
             </div>
             @* <div class="col-lg-4">
                 <label>Middle Name :</label>
@@ -33,11 +33,11 @@
             </div> *@
             <div class="col-lg-4">
                 <label>Date of Birth :</label>
-                <input type="date" class="form-control" asp-for="DOB" />
+                <input type="date" class="form-control" asp-for="DOB" id="txtdob" />
             </div>
             <div class="col-lg-4">
                 <label>Date of Joining :</label>
-                <input type="date" class="form-control" asp-for="DOJ" />
+                <input type="date" class="form-control" asp-for="DOJ" id="txtdoj" />
             </div>
         </div>
        @*  <div class="row">
@@ -50,7 +50,7 @@
             <div class="row" style="padding:1%">
             <div class="col-lg-4">
                 <label>Gender :</label>
-                <select class="form-control" asp-for="GENDER">
+                <select class="form-control" asp-for="GENDER" id="ddlGender">
                     <option value="0">Select</option>
                     <option value="1">Male</option>
                     <option value="2">Female</option>
@@ -59,27 +59,27 @@
             </div>
             <div class="col-lg-4">
                 <label>Department :</label>
-                 <select id="DEPARTMENTID" asp-for="DEPARTMENTID" asp-items="Model.ddlDepartment" class="form-control"></select>
+                 <select id="DEPARTMENTID" asp-for="DEPARTMENTID" asp-items="Model.ddlDepartment"  class="form-control"></select>
             </div>
             <div class="col-lg-4">
                 <label>SubDepartment :</label>
-                 <select id="SUBDEPARTMENTID" class="form-control"></select>
+                 <select id="SUBDEPARTMENTID" asp-for="SUBDEPARTMENTID" class="form-control"></select>
             </div>
         </div>
             <div class="row" style="padding:1%">
             <div class="col-lg-4">
                 <label>Designation :</label>
-                <select asp-for="DESIGNATIONID" asp-items="Model.ddlDesignation" class="form-control">
+                <select asp-for="DESIGNATIONID" asp-items="Model.ddlDesignation" class="form-control" id="ddlDesignation">
                 </select>
             </div>
             <div class="col-lg-4">
                 <label>Grade :</label>
-                <select asp-for="CATEGORYID" asp-items="Model.ddlCategory" class="form-control">
+                <select asp-for="CATEGORY_NAME" asp-items="Model.ddlCategory" class="form-control" id="ddlGrade">
                 </select>
             </div>
             <div class="col-lg-4">
                 <label>Location :</label>
-                <select asp-for="UNIT" asp-items="Model.ddlUnit" class="form-control">
+                <select asp-for="UNITID" asp-items="Model.ddlUnit" class="form-control" id="ddlLocation">
                 </select>
             </div>
         </div>
@@ -132,6 +132,12 @@
         </form>
     </section>
 </div>
+<div id="notification" class="notification">
+    Duplicate Employee Code !, Already Exist.
+</div>
+<div id="Insertnotification" class="notification">
+    Employee Details Succssfully Inserted ! - @Model.EMPLOYEENAME.
+</div>
 <style>
     .backstyle
     {
@@ -140,16 +146,82 @@
         padding: 25px 50px 25px;
         font-family: cursive;
     }
+
+    .notification {
+        display: none; /* Hidden by default */
+        position: fixed;
+        bottom: 40%;
+        right: 46%;
+        background-color: #333;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+        .notification.show {
+            display: block;
+            opacity: 1;
+        }
+
 </style>
 
 <script type="text/javascript">
     // Function to clear the form
     function clearForm() {
-        document.getElementById("employeeForm").reset();
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     document.getElementById("employeeForm").reset();
+        // });
+         // $('#txtEmployeeid').val('');
+         // $('#txtEmployeeName').val('');
+         // $('#txtdob').val('');
+         // $('#txtdoj').val('');
+         // $('#ddlGender').val('0');
+         // $('#DEPARTMENTID').val('0');
+         // $('#SUBDEPARTMENTID').val('');
+         // $('#ddlDesignation').val('0');
+         // $('#ddlGrade').val('0');
+         // $('#ddlLocation').val('0');
+         // $('#ddlGrade').val('0');
+           // location.reload();
+        
+        var url = '@Url.Action("EmployeeMaster", "Employee")';
+        window.location.href = url; // Redirect to the generated URL
+
     }
 
     $(document).ready(function () {
         // Event handler for department dropdown change
+        debugger;
+        if (@Model.result > 0  && @Model.result != 5) {
+            var $notification = $("#Insertnotification");
+
+            $notification.addClass("show");
+            alert("Insert Successfully.");
+            setTimeout(function () {
+                $notification.removeClass("show");
+            }, 5000); // Hide after 3 seconds
+            
+            clearForm();
+        }
+
+        var duplicate = @Model.result;
+        if (duplicate == 5) {
+            //alert('Duplicate Entry');
+            var $notification = $("#notification");
+
+            $notification.addClass("show");
+
+            setTimeout(function () {
+                $notification.removeClass("show");
+            }, 5000); // Hide after 3 seconds
+           // sleep(2000);
+            clearForm();
+        }
+
         $('#DEPARTMENTID').change(function () {
             debugger;
             var departmentid = $(this).val();
@@ -183,5 +255,7 @@
             }
         });
     });
+
+    
 </script>
 

@@ -58,5 +58,7 @@ namespace SyrmaSGS.Models
 
         public DateTime? CURRENTDATE { get; set; }    
 
+        public int result {  get; set; }
+
     }
 }

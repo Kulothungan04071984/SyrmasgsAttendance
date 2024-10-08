@@ -16,7 +16,7 @@ namespace SyrmaSGS.Controllers
         {
             _iServicescs = servicescs;
         }
-        public ActionResult EmployeeMaster(string departmentId)
+        public ActionResult EmployeeMaster()
         {
             var empDetails = _iServicescs.GetEmployeeDetail();
             return View(empDetails);
@@ -48,9 +48,9 @@ namespace SyrmaSGS.Controllers
         public ActionResult EmployeeMaster(EmployeeDetails model)
         {
             EmployeeDetails empty = new EmployeeDetails();
-            int result = 0;
-            if (ModelState.IsValid)
-            {
+           // int result = 0;
+           // if (ModelState.IsValid)
+            //{
                 var employee = new EmployeeMaster
                 {
                     //Employeemasterid = model.Employeemasterid,
@@ -63,14 +63,14 @@ namespace SyrmaSGS.Controllers
                     DepartmentName = model.DEPARTMENTID.ToString(),
                     Subdepartment = model.SUBDEPARTMENTID.ToString(),
                     Unit = model.UNITID.ToString(),
-                    CategoryName = model.CATEGORYID.ToString(),
+                    CategoryName = model.CATEGORY_NAME.ToString(),
                     Isactive = true,
                 };
 
-                result = _iServicescs.CreateEmployeeDetail(employee);
+               empty.result = _iServicescs.CreateEmployeeDetail(employee);
                
                
-            }
+            //}
             return View(empty);
         }
 

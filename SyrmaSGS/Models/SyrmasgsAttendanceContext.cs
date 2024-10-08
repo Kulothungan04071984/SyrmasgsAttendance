@@ -23,6 +23,8 @@ public partial class SyrmasgsAttendanceContext : DbContext
 
     public virtual DbSet<EmployeeMaster> EmployeeMasters { get; set; }
 
+    public virtual DbSet<EmployeeTest> EmployeeTests { get; set; }
+
     public virtual DbSet<SubDepartmentMaster> SubDepartmentMasters { get; set; }
 
     public virtual DbSet<UnitMaster> UnitMasters { get; set; }
@@ -133,6 +135,38 @@ public partial class SyrmasgsAttendanceContext : DbContext
             entity.Property(e => e.Unit)
                 .HasMaxLength(255)
                 .HasColumnName("UNIT");
+        });
+
+        modelBuilder.Entity<EmployeeTest>(entity =>
+        {
+            entity.HasKey(e => e.Employeemasterid).HasName("PK_EmployeeTest_EMPLOYEEMASTERID");
+
+            entity.ToTable("EmployeeTest");
+
+            entity.Property(e => e.Employeemasterid).HasColumnName("EMPLOYEEMASTERID");
+            entity.Property(e => e.CategoryName)
+                .HasMaxLength(125)
+                .HasColumnName("CATEGORY_NAME");
+            entity.Property(e => e.DepartmentName).HasColumnName("DEPARTMENT_NAME");
+            entity.Property(e => e.DesigName).HasColumnName("DESIG_NAME");
+            entity.Property(e => e.Dob)
+                .HasColumnType("datetime")
+                .HasColumnName("DOB");
+            entity.Property(e => e.Doj)
+                .HasColumnType("datetime")
+                .HasColumnName("DOJ");
+            entity.Property(e => e.Empcode)
+                .HasMaxLength(50)
+                .HasColumnName("EMPCODE");
+            entity.Property(e => e.Empname)
+                .HasMaxLength(125)
+                .HasColumnName("EMPNAME");
+            entity.Property(e => e.Gender)
+                .HasMaxLength(15)
+                .HasColumnName("GENDER");
+            entity.Property(e => e.Isactive).HasColumnName("ISACTIVE");
+            entity.Property(e => e.Subdepartment).HasColumnName("SUBDEPARTMENT");
+            entity.Property(e => e.Unit).HasColumnName("UNIT");
         });
 
         modelBuilder.Entity<SubDepartmentMaster>(entity =>

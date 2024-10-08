@@ -301,9 +301,11 @@ namespace SyrmaSGS.Models
 
         public List<SubDepartmentMaster> GetSubdepartmentmasters(string departmentId)
         {
+            List<SubDepartmentMaster> subDepartmentMasters = new List<SubDepartmentMaster>();
             try
             {
-                var subDepartmentList = _context.SubDepartmentMasters
+                
+                subDepartmentMasters = _context.SubDepartmentMasters
                     .Where(a => a.Departmentid ==Convert.ToInt32(departmentId) && a.IsActive == true)
                     .OrderBy(a => a.SubDepartmentName)
                     .Select(e => new SubDepartmentMaster
@@ -313,12 +315,12 @@ namespace SyrmaSGS.Models
                     })
                     .ToList();
 
-                return objSubdepartmentmasters;
+                return subDepartmentMasters;
             }
             catch (Exception ex)
             {
                 writeErrorMessage(ex.Message.ToString(), "GetSubdepartmentmasters");
-                return objSubdepartmentmasters;
+                return subDepartmentMasters;
             }
         }
 
@@ -363,9 +365,16 @@ namespace SyrmaSGS.Models
                 //objEmployeeMaster.ddlCategory.Insert(0, new SelectListItem { Value = "0", Text = "Select" });
                 //objEmployeeMaster.ddlUnit = _context.UnitMasters.Where(a => a.IsActive == true).OrderBy(a => a.UnitName).Select(e => new SelectListItem { Value = e.UnitId.ToString(), Text = e.UnitName }).ToList();
                 //objEmployeeMaster.ddlSubDepartment.Insert(0, (new SelectListItem { Value = "0", Text = "Select" }));
-                _context.EmployeeMasters.Add(employee);
-                _context.SaveChanges();
-                insertResult = 1;
+                var existsEmployee = _context.EmployeeMasters.Where(a => a.Empcode == employee.Empcode).Any();
+                if ((!existsEmployee))
+                {
+                    _context.EmployeeMasters.Add(employee);
+                    _context.SaveChanges();
+                    insertResult = 1;
+                }
+                else if (existsEmployee)
+                    insertResult = 5;
+
                 return insertResult;
             }
             catch (Exception ex)
@@ -374,6 +383,53 @@ namespace SyrmaSGS.Models
                 writeErrorMessage(ex.Message.ToString(), "GetEmployeeDetail");
                 return insertResult;
             }
+        }
+
+        public int InsertBulkUploads(List<EmployeeMaster> employeeDetails)
+        {
+            int result = 0;
+            EmployeeMaster objEmployeeMaster;
+            try
+            {
+                if (employeeDetails != null) {
+                    foreach (var employee in employeeDetails)
+                    {
+                        objEmployeeMaster = new EmployeeMaster();
+                        objEmployeeMaster.Empcode = employee.Empcode;
+                        objEmployeeMaster.Empname = employee.Empname;
+                        objEmployeeMaster.Dob= employee.Dob;
+                        objEmployeeMaster.Doj = employee.Doj;
+                        objEmployeeMaster.DepartmentName = employee.DepartmentName;
+                        objEmployeeMaster.DepartmentName=employee.DepartmentName;
+                        objEmployeeMaster.Subdepartment= employee.Subdepartment;
+                        objEmployeeMaster.CategoryName = employee.CategoryName;
+                        objEmployeeMaster.Isactive = employee.Isactive;
+                        var existsEmployee = _context.EmployeeMasters.Where(a => a.Empcode == employee.Empcode).Any();
+                        if (existsEmployee)
+                        {
+                            return result = 5;
+                            break;
+                        }
+                        else if (!existsEmployee)
+                        {
+                            _context.EmployeeMasters.Add(objEmployeeMaster);
+                            _context.SaveChanges();
+                            result = 1;
+                        }
+                    }
+                   
+                   
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result = 0; 
+                writeErrorMessage(ex.Message.ToString(), "InsertBulkUpload");
+                return result;
+            }
+            
         }
 
         public void writeErrorMessage(string errorMessage, string functionName)
